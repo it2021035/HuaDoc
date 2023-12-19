@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:insert="fragments/header :: header"></head>
+
+<body>
+<!-- Include the header fragment -->
+<div th:insert="fragments/menu :: menu"></div>
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Family Doctor App</h1>
+                <p>Welcome to the Family Doctor App.</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Include the footer fragment -->
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
