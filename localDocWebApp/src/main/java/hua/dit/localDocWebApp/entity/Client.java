@@ -1,6 +1,9 @@
 package hua.dit.localDocWebApp.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class Client {
@@ -10,13 +13,15 @@ public class Client {
     @Column
     private Integer id;
 
+
     @Column
     private String firstName;
+
 
     @Column
     private String lastName;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @Column

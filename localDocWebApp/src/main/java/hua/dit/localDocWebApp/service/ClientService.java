@@ -29,7 +29,7 @@ public class ClientService {
     }
 
     @Transactional
-    public List<Client> getClients(){
+    public Iterable<Client> getClients(){
         return clientRepository.findAll();
     }
 }
