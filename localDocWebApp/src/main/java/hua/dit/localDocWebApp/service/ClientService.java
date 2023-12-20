@@ -1,6 +1,7 @@
 package hua.dit.localDocWebApp.service;
 
 import hua.dit.localDocWebApp.entity.Client;
+import hua.dit.localDocWebApp.entity.Doctor;
 import hua.dit.localDocWebApp.repository.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import java.util.List;
 public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private DoctorService doctorService;
 
     @Transactional
     public void saveClient(Client client){
@@ -32,4 +36,12 @@ public class ClientService {
     public Iterable<Client> getClients(){
         return clientRepository.findAll();
     }
+
+
+    //@Transactional
+    //public List<Client> getDoctorsByPostalCode(String postalCode){
+   //     Doctor doctor = doctorService.getDoctorByPostalCode(postalCode);
+   //     return doctor.getClient();
+    //}
+
 }

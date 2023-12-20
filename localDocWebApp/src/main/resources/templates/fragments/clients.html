@@ -1,0 +1,42 @@
+<clients>
+
+    <div th:if="${ not#lists.isEmpty(clients)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="client : ${clients}">
+                <td th:text="${client.firstName}"></td>
+                <td th:text="${client.lastName}"></td>
+                <td th:if="${client.postalCode}">
+                    <a class="btn btn-info" th:href="@{/client/list/doc/{postalCode}(postalCode=${client.postalCode})}">Show near Doctors</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${ #lists.isEmpty(clients)}">
+        <h3> No Clients </h3>
+    </div>
+    <a href="/client/new" class="btn btn-primary" role="button">Create new Client</a>
+    <script type="text/javascript">
+        $("[name='deleteCourse']").click(function() {
+            var urlCall = "/course/";
+            $.ajax({
+                url : urlCall + $(this).attr('id'),
+                type : 'DELETE',
+                success : function(result) {
+                    console.log(result);
+                    $(location).attr("href", value="/course");
+                },
+                error : function(result) {
+                    console.log(result);S
+                },
+            });
+        });
+    </script>
+</clients>

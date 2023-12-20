@@ -1,0 +1,39 @@
+<doctors>
+
+    <div th:if="${ not#lists.isEmpty(doctors)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="doctor : ${doctors}">
+                <td th:text="${doctor.firstName}"></td>
+                <td th:text="${doctor.lastName}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${ #lists.isEmpty(doctors)}">
+       <h3> No Doctors </h3>
+    </div>
+    <a href="/doctor/new" class="btn btn-primary" role="button">Create new Doctor</a>
+    <script type="text/javascript">
+        $("[name='deleteCourse']").click(function() {
+            var urlCall = "/course/";
+            $.ajax({
+                url : urlCall + $(this).attr('id'),
+                type : 'DELETE',
+                success : function(result) {
+                    console.log(result);
+                    $(location).attr("href", value="/course");
+                },
+                error : function(result) {
+                    console.log(result);S
+                },
+            });
+        });
+    </script>
+</doctors>

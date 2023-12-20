@@ -2,6 +2,8 @@ package hua.dit.localDocWebApp.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Doctor {
 
@@ -37,18 +39,19 @@ public class Doctor {
     @Column
     private String speciality;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name="client_id")
-    private Client client;
+    @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name="doctor_id")
+    private List<Client> client;
 
 
-    public Client getClient() {
+    public void setClient(List<Client> client) {
+        this.client = client;
+    }
+
+    public List<Client> getClient() {
         return client;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
-    }
 
     public Doctor() {
     }
