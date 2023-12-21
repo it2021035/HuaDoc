@@ -15,6 +15,11 @@ public class DoctorService {
     @Autowired
     private DoctorRepository doctorRepository;
 
+    @Autowired
+    private ClientService clientService;
+
+
+
 
     @Transactional
     public void deleteDoctor(Integer id){
@@ -41,4 +46,16 @@ public class DoctorService {
     public Iterable<Doctor> getDoctorByPostalCode(String postalCode){
         return doctorRepository.findByPostalCode(postalCode);
     }
+
+    //in the client insert the doctors id
+    @Transactional
+    public void saveClientDoctor(Integer clientId, Integer doctorId){
+        Client client = clientService.getClient(clientId);
+        Doctor doctor = doctorRepository.findById(doctorId).get();
+        client.setDoctor(doctor);
+        clientService.saveClient(client);
+    }
+
+
+
 }

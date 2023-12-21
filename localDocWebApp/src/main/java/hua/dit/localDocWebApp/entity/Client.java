@@ -39,6 +39,19 @@ public class Client {
     @Column
     private String postalCode;
 
+    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinColumn(name="doctor_id")
+    private Doctor doctor;
+
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+
     public Client() {
     }
 

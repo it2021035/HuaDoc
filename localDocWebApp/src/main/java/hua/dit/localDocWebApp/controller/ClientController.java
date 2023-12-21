@@ -46,10 +46,17 @@ public class ClientController {
         return "client_list";
     }
 
-    @GetMapping("/list/doc/{postalCode}")
-    public String showDocList(Model model, @PathVariable String postalCode){
+    @GetMapping("/list/doc/{postalCode}/{client_id}")
+    public String showDocList(Model model, @PathVariable String postalCode, @PathVariable Integer client_id){
         model.addAttribute("doctors", doctorService.getDoctorByPostalCode(postalCode));
+        model.addAttribute("clients", clientService.getClient(client_id));
         return "doctor_list";
+    }
+
+    @GetMapping("/list/doc/{postalCode}/{client_id}/{doctor_id}")
+    public String saveClientDoctor(@PathVariable String postalCode, @PathVariable Integer client_id, @PathVariable Integer doctor_id){
+        doctorService.saveClientDoctor(client_id, doctor_id);
+        return "home";
     }
 
 

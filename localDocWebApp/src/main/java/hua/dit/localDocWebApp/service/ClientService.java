@@ -14,8 +14,6 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    @Autowired
-    private DoctorService doctorService;
 
     @Transactional
     public void saveClient(Client client){
@@ -38,10 +36,8 @@ public class ClientService {
     }
 
 
-    //@Transactional
-    //public List<Client> getDoctorsByPostalCode(String postalCode){
-   //     Doctor doctor = doctorService.getDoctorByPostalCode(postalCode);
-   //     return doctor.getClient();
-    //}
+
+
+
 
 }

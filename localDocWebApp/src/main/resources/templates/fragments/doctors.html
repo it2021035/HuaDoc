@@ -12,7 +12,17 @@
             <tr th:each="doctor : ${doctors}">
                 <td th:text="${doctor.firstName}"></td>
                 <td th:text="${doctor.lastName}"></td>
+                <td th:if="${doctor.id}">
+                    <!-- Iterate over clients for the current doctor -->
+                    <div th:each="client : ${clients}">
+                        <!-- Create a link for each client-doctor combination -->
+                        <a class="btn btn-info" th:href="@{/client/list/doc/{postalCode}/{client_id}/{doc_id}(postalCode=${client.postalCode}, client_id=${client.id}, doc_id=${doctor.id})}">
+                            Select Doctor
+                        </a>
+                    </div>
+                </td>
             </tr>
+
             </tbody>
         </table>
     </div>
