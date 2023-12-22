@@ -16,8 +16,8 @@
                     <!-- Iterate over clients for the current doctor -->
                     <div th:each="client : ${clients}">
                         <!-- Create a link for each client-doctor combination -->
-                        <a class="btn btn-info" th:href="@{/client/list/doc/{postalCode}/{client_id}/{doc_id}(postalCode=${client.postalCode}, client_id=${client.id}, doc_id=${doctor.id})}">
-                            Select Doctor
+                        <a class="btn btn-info" th:href="@{/pending/insert/{client_id}/{doc_id}(postalCode=${client.postalCode}, client_id=${client.id}, doc_id=${doctor.id})}">
+                            Request Aprroval for <span th:text="${client.firstName}"></span> <span th:text="${client.lastName}"></span>
                         </a>
                     </div>
                 </td>
@@ -29,7 +29,6 @@
     <div th:if="${ #lists.isEmpty(doctors)}">
        <h3> No Doctors </h3>
     </div>
-    <a href="/doctor/new" class="btn btn-primary" role="button">Create new Doctor</a>
     <script type="text/javascript">
         $("[name='deleteCourse']").click(function() {
             var urlCall = "/course/";

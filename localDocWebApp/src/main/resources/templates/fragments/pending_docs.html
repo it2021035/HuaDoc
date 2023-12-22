@@ -1,6 +1,6 @@
-<clients>
+<pending_docs>
 
-    <div th:if="${ not#lists.isEmpty(clients)}">
+    <div th:if="${ not#lists.isEmpty(pendingAprovals)}">
         <table class="table">
             <thead>
             <tr>
@@ -10,18 +10,19 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="client : ${clients}">
-                <td th:text="${client.firstName}"></td>
-                <td th:text="${client.lastName}"></td>
-                <td th:if="${client.postalCode}">
-                    <a class="btn btn-info" th:href="@{/client/list/doc/{postalCode}/{id}(postalCode=${client.postalCode}, id=${client.id})}">Show near Doctors</a>
+            <tr th:each="pending : ${pendingAprovals}">
+                <td th:text="${pending.doctor.firstName}"></td>
+                <td th:text="${pending.doctor.lastName}"></td>
+                <td th:if="${pending.doctor.id}">
+                    <a class="btn btn-info" th:href="@{/pending/show/{doctorId}(doctorId=${pending.doctor.id})}">Show Pending Clients</a>
                 </td>
             </tr>
+
             </tbody>
         </table>
     </div>
-    <div th:if="${ #lists.isEmpty(clients)}">
-        <h3> No Clients </h3>
+    <div th:if="${ #lists.isEmpty(pendingAprovals)}">
+        <h3> No Doctors with pending Clients </h3>
     </div>
     <script type="text/javascript">
         $("[name='deleteCourse']").click(function() {
@@ -39,4 +40,4 @@
             });
         });
     </script>
-</clients>
+</pending_docs>

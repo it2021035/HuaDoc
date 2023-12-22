@@ -43,6 +43,7 @@ public class Client {
     @JoinColumn(name="doctor_id")
     private Doctor doctor;
 
+
     public void setDoctor(Doctor doctor) {
         this.doctor = doctor;
     }

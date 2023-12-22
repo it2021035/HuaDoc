@@ -1,0 +1,48 @@
+<pending_docs_clients>
+
+    <div th:if="${ not#lists.isEmpty(pendingAprovalsClients)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="pending : ${pendingAprovalsClients}">
+                <td th:text="${pending.client.firstName}"></td>
+                <td th:text="${pending.client.lastName}"></td>
+                <td th:if="${pending.client.id}">
+                    <a class="btn btn-info" th:href="@{/pending/show/{doctorId}/{clientId}(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}">
+                        Accept Client
+                    </a>
+                    <a class="btn btn-danger" th:href="@{/pending/show/{doctorId}/{clientId}/decline(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}">
+                        Decline Client
+                    </a>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${ #lists.isEmpty(pendingAprovalsClients)}">
+        <h3> No pending Clients </h3>
+    </div>
+    <script type="text/javascript">
+        $("[name='deleteCourse']").click(function() {
+            var urlCall = "/course/";
+            $.ajax({
+                url : urlCall + $(this).attr('id'),
+                type : 'DELETE',
+                success : function(result) {
+                    console.log(result);
+                    $(location).attr("href", value="/course");
+                },
+                error : function(result) {
+                    console.log(result);S
+                },
+            });
+        });
+    </script>
+</pending_docs_clients>

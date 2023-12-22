@@ -20,6 +20,8 @@ public class ClientController {
     @Autowired
     private DoctorService doctorService;
 
+
+    //shows the add a new client form
     @GetMapping("/new")
     public String addClient(Model model){
         Client client = new Client();
@@ -27,25 +29,28 @@ public class ClientController {
         return "add_client";
     }
 
+
+    //saves the new client in db
     @PostMapping("/new")
     public String saveClient(Client client, Model model){
         clientService.saveClient(client);
         return "home";
     }
 
-    @GetMapping("/list/doc")
-    public String showDocList(Model model){
-        model.addAttribute("doctors", doctorService.getDoctors());
-        return "doctor_list";
-    }
 
 
+
+    //lists all the clients
     @GetMapping("/list")
     public String showClientList(Model model){
         model.addAttribute("clients", clientService.getClients());
         return "client_list";
     }
+    //
 
+
+
+    //lists all the doctors that have the same postal code as the client
     @GetMapping("/list/doc/{postalCode}/{client_id}")
     public String showDocList(Model model, @PathVariable String postalCode, @PathVariable Integer client_id){
         model.addAttribute("doctors", doctorService.getDoctorByPostalCode(postalCode));
@@ -53,6 +58,8 @@ public class ClientController {
         return "doctor_list";
     }
 
+
+    //not being used
     @GetMapping("/list/doc/{postalCode}/{client_id}/{doctor_id}")
     public String saveClientDoctor(@PathVariable String postalCode, @PathVariable Integer client_id, @PathVariable Integer doctor_id){
         doctorService.saveClientDoctor(client_id, doctor_id);

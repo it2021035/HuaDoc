@@ -42,6 +42,9 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Client> client;
 
+    @OneToMany(mappedBy = "doctor", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private List<PendingAproval> pendingAproval;
+
 
     public void setClient(List<Client> client) {
         this.client = client;
