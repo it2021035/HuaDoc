@@ -54,21 +54,25 @@ public class PendingAprovalService {
     @Transactional
     public List<PendingAproval> showClientsOfDoctor(Integer id){
         List<PendingAproval> temp = pendingAprovalRepository.findAll();
-        for (int i = 0; i < temp.size(); i++) { //removes duplicates
-            Integer currentElement = temp.get(i).getClient().getId();
+        //removes the duplicates of the same combination clien_id and doctor_id
+        for (int i = 0; i < temp.size(); i++) {
+            Integer currentElementClient = temp.get(i).getClient().getId();
+            Integer currentElementDoctor = temp.get(i).getDoctor().getId();
 
             // Remove duplicates of the current element after it
             for (int j = i + 1; j < temp.size(); j++) {
-                if (Objects.equals(currentElement, temp.get(j).getClient().getId())) {
+                if (Objects.equals(currentElementClient, temp.get(j).getClient().getId()) && Objects.equals(currentElementDoctor, temp.get(j).getDoctor().getId())) {
                     temp.remove(j);
                     j--; // Adjust the index after removal
                 }
             }
         }
 
+
         //makes a new list with only the clients of the doctor requested
         List<PendingAproval> temp2 = new ArrayList<>();
         for (int i = 0; i < temp.size(); i++) {
+            System.out.println(temp.get(i).getClient().getId()+" "+temp.get(i).getDoctor().getId());
             if(temp.get(i).getDoctor().getId() == id){
                 temp2.add(temp.get(i));
             }
@@ -91,8 +95,12 @@ public class PendingAprovalService {
         client.setDoctor(doctor);
         clientService.saveClient(client);
         //
-        //removes the pending aproval
-        deleteClient(doctorId, clientId);
+        //removes the pending aproval for eveyone if that client id
+        for (int i = 0; i < temp.size(); i++) {
+            if(temp.get(i).getClient().getId() == clientId){
+                pendingAprovalRepository.deleteById(temp.get(i).getId());
+            }
+        }
 
     }
 
