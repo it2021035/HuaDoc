@@ -54,6 +54,7 @@ public class PendingAprovalController {
     @GetMapping("/show/{doctorId}")
     public String showPendingAprovalSpecific(Model model, @PathVariable Integer doctorId){
         model.addAttribute("pendingAprovalsClients", pendingAprovalService.showClientsOfDoctor(doctorId));
+        //model.addAttribute("doctor", pendingAprovalService.getDoctor(doctorId));
         return "pending_doctor_list_client";
     }
 

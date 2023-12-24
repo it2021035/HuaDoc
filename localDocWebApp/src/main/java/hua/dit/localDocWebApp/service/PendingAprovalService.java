@@ -29,6 +29,14 @@ public class PendingAprovalService {
     }
 
 
+
+    //get docker from id
+    @Transactional
+    public Doctor getDoctor(Integer id){
+        return pendingAprovalRepository.findById(id).get().getDoctor();
+    }
+
+
     //returns all the doctors that have pending aprovals
     @Transactional
     public List<PendingAproval> getPendingAprovals(){
@@ -94,6 +102,10 @@ public class PendingAprovalService {
         Doctor doctor = doctorRepository.findById(doctorId).get(); //FIX THIS LATER
         client.setDoctor(doctor);
         clientService.saveClient(client);
+        //increases the current clients of the doctor
+        doctor.setCurrentClients(doctor.getCurrentClients()+1);
+        doctorRepository.save(doctor); //FIX THIS LATER
+
         //
         //removes the pending aproval for eveyone if that client id
         for (int i = 0; i < temp.size(); i++) {

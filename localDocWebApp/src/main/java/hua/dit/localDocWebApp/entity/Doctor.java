@@ -39,6 +39,12 @@ public class Doctor {
     @Column
     private String speciality;
 
+    @Column
+    private Integer maxClients;
+
+    @Column
+    private Integer currentClients;
+
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Client> client;
 
@@ -56,12 +62,13 @@ public class Doctor {
 
 
     public Doctor() {
+        this.currentClients = 0;
     }
 
 
 
 
-    public Doctor(String firstName, String lastName, String email, String phone, String address, String city, String state, String postalCode, String speciality) {
+    public Doctor(String firstName, String lastName, String email, String phone, String address, String city, String state, String postalCode, String speciality, Integer maxClients, Integer currentClients) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -71,10 +78,21 @@ public class Doctor {
         this.state = state;
         this.postalCode = postalCode;
         this.speciality = speciality;
+        this.maxClients = maxClients;
+        this.currentClients = 0;
     }
+
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getCurrentClients() {
+        return currentClients;
+    }
+
+    public Integer getMaxClients() {
+        return maxClients;
     }
 
     public String getFirstName() {
@@ -117,8 +135,16 @@ public class Doctor {
         this.id = id;
     }
 
+    public void setCurrentClients(Integer currentClients) {
+        this.currentClients = currentClients;
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public void setMaxClients(Integer maxClients) {
+        this.maxClients = maxClients;
     }
 
     public void setLastName(String lastName) {
