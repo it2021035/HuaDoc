@@ -29,7 +29,7 @@ public class DoctorController {
     @PostMapping("/new")
     public String saveDoctor(Doctor doctor, Model model){
         doctorService.saveDoctor(doctor);
-        return "home";
+        return "redirect:/";
     }
 
     //lists all the doctors

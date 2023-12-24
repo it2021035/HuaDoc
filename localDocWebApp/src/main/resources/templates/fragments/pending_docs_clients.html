@@ -15,13 +15,17 @@
                 <td th:text="${pending.client.lastName}"></td>
                 <td th:if="${pending.client.id}">
                     <th:block th:if="${pending.doctor.currentClients lt pending.doctor.maxClients}">
-                        <a class="btn btn-info" th:href="@{/pending/show/{doctorId}/{clientId}(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}">
-                            Accept Client
-                        </a>
+                        <form th:action="@{/pending/show/{doctorId}/{clientId}(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}" method="post">
+                            <input type="hidden" name="_method" value="post" />
+                            <button type="submit" class="btn btn-info">Accept Client</button>
+                        </form>
                     </th:block>
-                    <a class="btn btn-danger" th:href="@{/pending/show/{doctorId}/{clientId}/decline(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}">
-                        Decline Client
-                    </a>
+
+                    <form th:action="@{/pending/show/{doctorId}/{clientId}/decline(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}" method="post">
+                        <input type="hidden" name="_method" value="post" />
+                        <button type="submit" class="btn btn-danger">Decline Client</button>
+                    </form>
+
                 </td>
 
             </tr>

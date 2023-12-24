@@ -34,7 +34,7 @@ public class ClientController {
     @PostMapping("/new")
     public String saveClient(Client client, Model model){
         clientService.saveClient(client);
-        return "home";
+        return "redirect:/";
     }
 
 
@@ -60,20 +60,15 @@ public class ClientController {
 
 
     //removes a clients doctor from the client
-    @GetMapping("/list/{client_id}/removeDoc/{doctor_id}")
+    @PostMapping("/list/{client_id}/removeDoc/{doctor_id}")
     public String removeClientDoctor(@PathVariable Integer client_id, @PathVariable Integer doctor_id){
         clientService.removeClientDoctor(client_id);
         doctorService.decreaseCurrentPatients(doctor_id);
-        return "home";
+        return "redirect:/";
     }
 
 
-    //not being used
-    @GetMapping("/list/doc/{postalCode}/{client_id}/{doctor_id}")
-    public String saveClientDoctor(@PathVariable String postalCode, @PathVariable Integer client_id, @PathVariable Integer doctor_id){
-        doctorService.saveClientDoctor(client_id, doctor_id);
-        return "home";
-    }
+
 
 
 }

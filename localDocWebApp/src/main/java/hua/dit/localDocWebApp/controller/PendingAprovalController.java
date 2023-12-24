@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -20,27 +21,27 @@ public class PendingAprovalController {
 
     //this puts the client in the pending list for the chosen doctor
     //happened when the client clicks the button "request aproval" in the doctor list
-    @GetMapping("/insert/{clientId}/{doctorId}")
+    @PostMapping("/insert/{clientId}/{doctorId}")
     public String insertPendingAproval(@PathVariable Integer clientId, @PathVariable Integer doctorId){
         Client client = new Client();
         client.setId(clientId);
         Doctor doctor = new Doctor();
         doctor.setId(doctorId);
         pendingAprovalService.savePendingAproval(client, doctor);
-        return "home";
+        return "redirect:/";
     }
 
 
-    @GetMapping("/show/{doctorId}/{clientId}")
+    @PostMapping("/show/{doctorId}/{clientId}")
     public String acceptClient(@PathVariable Integer doctorId, @PathVariable Integer clientId){
         pendingAprovalService.acceptClient(doctorId, clientId);
-        return "home";
+        return "redirect:/";
     }
 
-    @GetMapping("/show/{doctorId}/{clientId}/decline")
+    @PostMapping("/show/{doctorId}/{clientId}/decline")
     public String declineClient(@PathVariable Integer doctorId, @PathVariable Integer clientId){
         pendingAprovalService.deleteClient(doctorId, clientId);
-        return "home";
+        return "redirect:/";
     }
 
 
@@ -54,7 +55,6 @@ public class PendingAprovalController {
     @GetMapping("/show/{doctorId}")
     public String showPendingAprovalSpecific(Model model, @PathVariable Integer doctorId){
         model.addAttribute("pendingAprovalsClients", pendingAprovalService.showClientsOfDoctor(doctorId));
-        //model.addAttribute("doctor", pendingAprovalService.getDoctor(doctorId));
         return "pending_doctor_list_client";
     }
 
