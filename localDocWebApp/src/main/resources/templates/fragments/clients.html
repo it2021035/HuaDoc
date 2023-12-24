@@ -16,6 +16,9 @@
                 <td th:if="${client.doctor == null}">
                     <a class="btn btn-info" th:href="@{/client/list/doc/{postalCode}/{id}(postalCode=${client.postalCode}, id=${client.id})}">Show near Doctors</a>
                 </td>
+                <td th:if="${client.doctor != null}">
+                    <a class="btn btn-warning" th:href="@{/client/list/{clientId}/removeDoc/{doctorId}(clientId=${client.id}, doctorId=${client.doctor.id})}">Remove Current Doctor</a>
+                </td>
             </tr>
             </tbody>
         </table>

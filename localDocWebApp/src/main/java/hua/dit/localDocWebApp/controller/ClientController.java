@@ -59,6 +59,15 @@ public class ClientController {
     }
 
 
+    //removes a clients doctor from the client
+    @GetMapping("/list/{client_id}/removeDoc/{doctor_id}")
+    public String removeClientDoctor(@PathVariable Integer client_id, @PathVariable Integer doctor_id){
+        clientService.removeClientDoctor(client_id);
+        doctorService.decreaseCurrentPatients(doctor_id);
+        return "home";
+    }
+
+
     //not being used
     @GetMapping("/list/doc/{postalCode}/{client_id}/{doctor_id}")
     public String saveClientDoctor(@PathVariable String postalCode, @PathVariable Integer client_id, @PathVariable Integer doctor_id){

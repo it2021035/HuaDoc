@@ -15,6 +15,7 @@ public class ClientService {
     private ClientRepository clientRepository;
 
 
+
     @Transactional
     public void saveClient(Client client){
         clientRepository.save(client);
@@ -33,6 +34,13 @@ public class ClientService {
     @Transactional
     public Iterable<Client> getClients(){
         return clientRepository.findAll();
+    }
+
+    @Transactional
+    public void removeClientDoctor(Integer clientId){
+        Client client = clientRepository.findById(clientId).get();
+        client.setDoctor(null);
+        clientRepository.save(client);
     }
 
 

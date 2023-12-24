@@ -57,5 +57,14 @@ public class DoctorService {
     }
 
 
+    //decreases the current number of patients of the doctor by 1
+    @Transactional
+    public void decreaseCurrentPatients(Integer doctorId){
+        Doctor doctor = doctorRepository.findById(doctorId).get();
+       doctor.setCurrentClients(doctor.getCurrentClients()-1);
+        doctorRepository.save(doctor);
+    }
+
+
 
 }
