@@ -1,0 +1,33 @@
+<family>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+    <div th:if="${ not#lists.isEmpty(familys)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Relation</th>
+                <th>Options</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="family : ${familys}">
+                <td th:text="${family.firstName}"></td>
+                <td th:text="${family.lastName}"></td>
+                <td th:text="${family.relation}"></td>
+                <td th:if="${family.id}">
+                    <a class="btn btn-warning" th:href="@{/family/{id}(id=${family.id})}"><i class="fas fa-edit"></i> Edit</a>
+                    <form style="display: inline-block" th:action="@{/family/{id}/remove(id=${family.id})}" method="post">
+                        <input type="hidden" name="_method" value="delete" />
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Remove</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${ #lists.isEmpty(familys)}">
+        <h3> No Family Members </h3>
+    </div>
+    <a class="btn btn-info" th:href="@{/family/new/{client_id}(client_id =${client_id})}"><i class="fas fa-pen"></i> Add family</a>
+</family>

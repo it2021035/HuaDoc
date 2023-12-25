@@ -1,5 +1,5 @@
 <pending_docs_clients>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <div th:if="${ not#lists.isEmpty(pendingAprovalsClients)}">
         <table class="table">
             <thead>
@@ -15,18 +15,18 @@
                 <td th:text="${pending.client.lastName}"></td>
                 <td th:if="${pending.client.id}">
                     <th:block th:if="${pending.doctor.currentClients lt pending.doctor.maxClients}">
-                        <form th:action="@{/pending/show/{doctorId}/{clientId}(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}" method="post">
+                        <form style="display: inline-block" th:action="@{/pending/show/{doctorId}/{clientId}(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}" method="post">
                             <input type="hidden" name="_method" value="post" />
-                            <button type="submit" class="btn btn-info">Accept Client</button>
+                            <button type="submit" class="btn btn-info"><i class="fas fa-plus-square"></i> Accept Client</button>
                         </form>
                     </th:block>
 
-                    <form th:action="@{/pending/show/{doctorId}/{clientId}/decline(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}" method="post">
+                    <form style="display: inline-block" th:action="@{/pending/show/{doctorId}/{clientId}/decline(doctorId=${pending.doctor.id}, clientId=${pending.client.id})}" method="post">
                         <input type="hidden" name="_method" value="post" />
-                        <button type="submit" class="btn btn-danger">Decline Client</button>
+                        <button type="submit" class="btn btn-danger"><i class="fas fa-times-circle"></i> Decline Client</button>
                     </form>
-
                 </td>
+
 
             </tr>
 
@@ -36,20 +36,4 @@
     <div th:if="${ #lists.isEmpty(pendingAprovalsClients)}">
         <h3> No pending Clients </h3>
     </div>
-    <script type="text/javascript">
-        $("[name='deleteCourse']").click(function() {
-            var urlCall = "/course/";
-            $.ajax({
-                url : urlCall + $(this).attr('id'),
-                type : 'DELETE',
-                success : function(result) {
-                    console.log(result);
-                    $(location).attr("href", value="/course");
-                },
-                error : function(result) {
-                    console.log(result);S
-                },
-            });
-        });
-    </script>
 </pending_docs_clients>

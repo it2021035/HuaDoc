@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
 
 <head th:insert="fragments/header :: header"></head>
 
@@ -64,7 +65,7 @@
                 <label for="maxClients">Max Clients</label>
                 <input type="text" id="maxClients" class="form-control" th:field="*{maxClients}">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-outline-success"><i class="fas fa-save"></i> Submit</button>
         </form>
     </div>
 </main>

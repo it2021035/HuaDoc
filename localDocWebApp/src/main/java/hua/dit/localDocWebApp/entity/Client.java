@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.List;
+
 @Entity
 public class Client {
 
@@ -42,6 +44,10 @@ public class Client {
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="doctor_id")
     private Doctor doctor;
+
+
+    @OneToMany(mappedBy = "client", cascade = {CascadeType.ALL})
+    private List<Family> family;
 
 
     public void setDoctor(Doctor doctor) {

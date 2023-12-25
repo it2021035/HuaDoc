@@ -1,4 +1,5 @@
 <pending_docs>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
 
     <div th:if="${ not#lists.isEmpty(pendingAprovals)}">
         <table class="table">
@@ -14,7 +15,7 @@
                 <td th:text="${pending.doctor.firstName}"></td>
                 <td th:text="${pending.doctor.lastName}"></td>
                 <td th:if="${pending.doctor.id}">
-                    <a class="btn btn-info" th:href="@{/pending/show/{doctorId}(doctorId=${pending.doctor.id})}">Show Pending Clients</a>
+                    <a class="btn btn-info" th:href="@{/pending/show/{doctorId}(doctorId=${pending.doctor.id})}"><i class="fas fa-eye"></i> Show Pending Clients</a>
                 </td>
             </tr>
 
@@ -24,20 +25,5 @@
     <div th:if="${ #lists.isEmpty(pendingAprovals)}">
         <h3> No Doctors with pending Clients </h3>
     </div>
-    <script type="text/javascript">
-        $("[name='deleteCourse']").click(function() {
-            var urlCall = "/course/";
-            $.ajax({
-                url : urlCall + $(this).attr('id'),
-                type : 'DELETE',
-                success : function(result) {
-                    console.log(result);
-                    $(location).attr("href", value="/course");
-                },
-                error : function(result) {
-                    console.log(result);S
-                },
-            });
-        });
-    </script>
+
 </pending_docs>

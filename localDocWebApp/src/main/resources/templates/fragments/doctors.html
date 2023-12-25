@@ -1,4 +1,5 @@
 <doctors>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
 
     <div th:if="${ not#lists.isEmpty(doctors)}">
         <table class="table">
@@ -18,7 +19,7 @@
                         <!-- Create a link for each client-doctor combination -->
                         <form th:action="@{/pending/insert/{client_id}/{doc_id}(postalCode=${client.postalCode}, client_id=${client.id}, doc_id=${doctor.id})}" method="post">
                             <input type="hidden" name="_method" value="post" />
-                            <button type="submit" class="btn btn-info">Request Aprroval for <span th:text="${client.firstName}"></span> <span th:text="${client.lastName}"></span></button>
+                            <button type="submit" class="btn btn-info"><i class="fas fa-envelope"></i> Request Aprroval for <span th:text="${client.firstName}"></span> <span th:text="${client.lastName}"></span></button>
                         </form>
                     </div>
                 </td>
@@ -30,20 +31,4 @@
     <div th:if="${ #lists.isEmpty(doctors)}">
        <h3> No Doctors </h3>
     </div>
-    <script type="text/javascript">
-        $("[name='deleteCourse']").click(function() {
-            var urlCall = "/course/";
-            $.ajax({
-                url : urlCall + $(this).attr('id'),
-                type : 'DELETE',
-                success : function(result) {
-                    console.log(result);
-                    $(location).attr("href", value="/course");
-                },
-                error : function(result) {
-                    console.log(result);S
-                },
-            });
-        });
-    </script>
 </doctors>
