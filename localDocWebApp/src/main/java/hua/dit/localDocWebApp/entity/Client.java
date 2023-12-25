@@ -16,28 +16,39 @@ public class Client {
     private Integer id;
 
 
+    @NotBlank(message = "First name is mandatory")
     @Column
     private String firstName;
 
 
+    @NotBlank(message = "Last name is mandatory")
     @Column
     private String lastName;
 
+
+
+
+    @Email(message = "Email should be valid")
     @Column(unique = true)
     private String email;
 
+    @Pattern(regexp = "^[0-9]{10}$", message = "Phone number should be 10 digits")
     @Column
     private String phone;
 
+    @NotBlank(message = "Address is mandatory")
     @Column
     private String address;
 
+    @NotBlank(message = "City is mandatory")
     @Column
     private String city;
 
+    @NotBlank(message = "State is mandatory")
     @Column
     private String state;
 
+    @Pattern(regexp = "^[0-9]{5}$", message = "Postal code should be 5 digits")
     @Column
     private String postalCode;
 

@@ -3,6 +3,7 @@ package hua.dit.localDocWebApp.controller;
 import hua.dit.localDocWebApp.entity.Doctor;
 import hua.dit.localDocWebApp.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,8 +29,13 @@ public class DoctorController {
     //saves the new doctor in db
     @PostMapping("/new")
     public String saveDoctor(Doctor doctor, Model model){
-        doctorService.saveDoctor(doctor);
-        return "redirect:/";
+        try {
+            doctorService.saveDoctor(doctor);
+            return "redirect:/";
+        }catch (DataIntegrityViolationException e){
+            model.addAttribute("error", "Email already exists");
+            return "add_doctor";
+        }
     }
 
     //lists all the doctors

@@ -3,7 +3,9 @@ package hua.dit.localDocWebApp.controller;
 import hua.dit.localDocWebApp.entity.Client;
 import hua.dit.localDocWebApp.service.ClientService;
 import hua.dit.localDocWebApp.service.DoctorService;
+import jakarta.websocket.OnError;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,8 +35,13 @@ public class ClientController {
     //saves the new client in db
     @PostMapping("/new")
     public String saveClient(Client client, Model model){
-        clientService.saveClient(client);
-        return "redirect:/";
+        try {
+            clientService.saveClient(client);
+            return "redirect:/";
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("error", "Email already exists");
+            return "add_client";
+        }
     }
 
 
@@ -66,6 +73,7 @@ public class ClientController {
         doctorService.decreaseCurrentPatients(doctor_id);
         return "redirect:/";
     }
+
 
 
 

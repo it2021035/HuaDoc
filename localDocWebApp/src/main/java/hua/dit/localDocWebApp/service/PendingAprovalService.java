@@ -80,8 +80,7 @@ public class PendingAprovalService {
         //makes a new list with only the clients of the doctor requested
         List<PendingAproval> temp2 = new ArrayList<>();
         for (int i = 0; i < temp.size(); i++) {
-            System.out.println(temp.get(i).getClient().getId()+" "+temp.get(i).getDoctor().getId());
-            if(temp.get(i).getDoctor().getId() == id){
+            if(Objects.equals(temp.get(i).getDoctor().getId(), id)){
                 temp2.add(temp.get(i));
             }
         }
@@ -109,7 +108,7 @@ public class PendingAprovalService {
         //
         //removes the pending aproval for eveyone if that client id
         for (int i = 0; i < temp.size(); i++) {
-            if(temp.get(i).getClient().getId() == clientId){
+            if(Objects.equals(temp.get(i).getClient().getId(), clientId)){
                 pendingAprovalRepository.deleteById(temp.get(i).getId());
             }
         }
@@ -122,7 +121,7 @@ public class PendingAprovalService {
         //removes the pending aproval
         List<PendingAproval> temp = pendingAprovalRepository.findAll();
         for (int i = 0; i < temp.size(); i++) {
-            if(temp.get(i).getDoctor().getId() == doctorId && temp.get(i).getClient().getId() == clientId){
+            if(Objects.equals(temp.get(i).getDoctor().getId(), doctorId) && Objects.equals(temp.get(i).getClient().getId(), clientId)){
                 pendingAprovalRepository.deleteById(temp.get(i).getId());
             }
         }

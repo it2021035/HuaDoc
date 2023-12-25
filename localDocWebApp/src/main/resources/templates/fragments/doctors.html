@@ -7,12 +7,24 @@
             <tr>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>City</th>
+                <th>Postal Code</th>
+                <th>Specialty</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="doctor : ${doctors}">
                 <td th:text="${doctor.firstName}"></td>
                 <td th:text="${doctor.lastName}"></td>
+                <td th:text="${doctor.email}"></td>
+                <td th:text="${doctor.phone}"></td>
+                <td th:text="${doctor.address}"></td>
+                <td th:text="${doctor.city}"></td>
+                <td th:text="${doctor.postalCode}"></td>
+                <td th:text="${doctor.speciality}"></td>
                 <td th:if="${doctor.id}">
                     <!-- Iterate over clients for the current doctor -->
                     <div th:each="client : ${clients}">

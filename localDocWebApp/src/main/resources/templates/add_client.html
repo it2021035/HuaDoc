@@ -18,42 +18,53 @@
 
             <div class="form-group">
                 <label for="firstName">First Name</label>
-                <input type="text" id="firstName" class="form-control" th:field="*{firstName}">
+                <input type="text" id="firstName" class="form-control" th:field="*{firstName}" pattern="[A-Za-z]+" title="Please enter only letters" required="required">
+                <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label for="lastName">Last Name</label>
-                <input type="text" id="lastName" class="form-control" th:field="*{lastName}">
+                <input type="text" id="lastName" class="form-control" th:field="*{lastName}" pattern="[A-Za-z]+" title="Please enter only letters" required="required">
+                <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}" class="text-danger"></span>
             </div>
+
 
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="text" id="email" class="form-control" th:field="*{email}">
+                <input type="email" id="email" class="form-control" th:field="*{email}" required="required" />
+                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></span>
             </div>
+            <div th:if="${error}" class="text-danger">
+                <p th:text="${error}"></p>
+            </div>
+
+
 
             <div class="form-group">
                 <label for="phone">Phone</label>
-                <input type="text" id="phone" class="form-control" th:field="*{phone}">
+                <input type="text" id="phone" class="form-control" th:field="*{phone}" pattern="[0-9]{10}" title="Please enter only 10 numbers" required="required">
+                <span th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="text-danger"></span>
             </div>
+
 
             <div class="form-group">
                 <label for="address">Address</label>
-                <input type="text" id="address" class="form-control" th:field="*{address}">
+                <input type="text" id="address" class="form-control" th:field="*{address}" required="required">
             </div>
 
             <div class="form-group">
                 <label for="city">City</label>
-                <input type="text" id="city" class="form-control" th:field="*{city}">
+                <input type="text" id="city" class="form-control" th:field="*{city}" required="required">
             </div>
 
             <div class="form-group">
                 <label for="state">State</label>
-                <input type="text" id="state" class="form-control" th:field="*{state}">
+                <input type="text" id="state" class="form-control" th:field="*{state}" required="required">
             </div>
 
             <div class="form-group">
                 <label for="postalcode">Postal Code</label>
-                <input type="text" id="postalcode" class="form-control" th:field="*{postalCode}">
+                <input type="text" id="postalcode" class="form-control" th:field="*{postalCode}" pattern="[0-9]{5}" title="Please enter only 5 numbers" required="required">
             </div>
             <button type="submit" class="btn btn-outline-success"><i class="fas fa-save"></i> Submit</button>
         </form>
