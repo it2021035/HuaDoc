@@ -28,6 +28,16 @@ public class User {
     @Email
     private String email;
 
+    private String role;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     @NotBlank
     @Size(max = 120)
     private String password;
@@ -41,10 +51,12 @@ public class User {
     public User() {
     }
 
-    public User(String username, String email, String password) {
+
+    public User(String username, String email, String password,String role) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public Integer getId() {

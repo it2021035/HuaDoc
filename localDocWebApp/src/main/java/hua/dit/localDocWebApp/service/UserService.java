@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
         String encodedPasswod = passwordEncoder.encode(passwd);
         user.setPassword(encodedPasswod);
 
-        Role role = roleRepository.findByName("ROLE_USER")
+        Role role = roleRepository.findByName(user.getRole())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         Set<Role> roles = new HashSet<>();
         roles.add(role);
