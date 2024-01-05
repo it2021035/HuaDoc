@@ -42,13 +42,16 @@ public class UserService implements UserDetailsService {
         Set<Role> roles = new HashSet<>();
         roles.add(role);
         user.setRoles(roles);
-
         user = userRepository.save(user);
         return user.getId();
     }
+    @Transactional
+    public void deleteUser(User user){
+        userRepository.delete(user);
+    }
 
     @Transactional
-    public Integer updateUer(User user) {
+    public Integer updateUser(User user) {
         user = userRepository.save(user);
         return user.getId();
     }

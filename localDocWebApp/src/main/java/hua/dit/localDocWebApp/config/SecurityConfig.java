@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/home","/register","/saveUser").permitAll()
                         .requestMatchers("/client/new","/client/list","/doctor/list","/family/**").hasRole("CLIENT")
                         .requestMatchers("/doctor/new","/pending/**").hasRole("DOCTOR")
+                        .requestMatchers("/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -50,4 +51,5 @@ public class SecurityConfig {
         return http.build();
 
     }
+
 }
