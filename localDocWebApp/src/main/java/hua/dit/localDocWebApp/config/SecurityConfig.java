@@ -40,6 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/client/new","/client/list","/doctor/list","/family/**").hasRole("CLIENT")
                         .requestMatchers("/doctor/new","/pending/**").hasRole("DOCTOR")
                         .requestMatchers("/users/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -47,6 +48,8 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
+
+
 
         return http.build();
 

@@ -17,8 +17,9 @@ public class ClientService {
 
 
     @Transactional
-    public void saveClient(Client client){
+    public Client saveClient(Client client){
         clientRepository.save(client);
+        return client;
     }
 
     @Transactional
@@ -37,10 +38,11 @@ public class ClientService {
     }
 
     @Transactional
-    public void removeClientDoctor(Integer clientId){
+    public Client removeClientDoctor(Integer clientId){
         Client client = clientRepository.findById(clientId).get();
         client.setDoctor(null);
         clientRepository.save(client);
+        return client;
     }
 
 
