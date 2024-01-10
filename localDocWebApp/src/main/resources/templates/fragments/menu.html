@@ -12,22 +12,22 @@
                         <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/client/new">Add Client</a>
+                        <a sec:authorize="hasRole('CLIENT')" class="nav-link" href="/client/new">Add Client</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/doctor/new">Add Doctor</a>
+                        <a sec:authorize="hasRole('DOCTOR')" class="nav-link" href="/doctor/new">Add Doctor</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/doctor/list">Show Doctors</a>
+                        <a sec:authorize="hasRole('CLIENT')" class="nav-link" href="/doctor/list">Show Doctors</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/client/list">Show Clients</a>
+                        <a sec:authorize="hasRole('CLIENT')" class="nav-link" href="/client/list">Show Clients</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/pending/show">Show Pending</a>
+                        <a sec:authorize="hasRole('DOCTOR')" class="nav-link" href="/pending/show">Show Pending</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/users">Users</a>
+                        <a sec:authorize="hasRole('ADMIN')" class="nav-link" href="/users">Users</a>
                     </li>
                     <li sec:authorize="isAuthenticated()"  class="nav-item">
                         <form th:action="@{/logout}" method="post">
