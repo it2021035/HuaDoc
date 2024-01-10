@@ -2,6 +2,7 @@ package hua.dit.localDocWebApp.service;
 
 import hua.dit.localDocWebApp.entity.Client;
 import hua.dit.localDocWebApp.entity.Doctor;
+import hua.dit.localDocWebApp.entity.User;
 import hua.dit.localDocWebApp.repository.ClientRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,11 @@ public class ClientService {
         client.setDoctor(null);
         clientRepository.save(client);
         return client;
+    }
+
+    @Transactional
+    public Iterable<Client> getClientsByUserId(User user){
+        return clientRepository.findByUser(user);
     }
 
 

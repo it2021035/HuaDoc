@@ -9,7 +9,7 @@
 <div th:insert="fragments/menu :: menu"></div>
 <main>
     <div class="container" >
-        <form action="#" th:action="@{/doctor/new}" th:object="${doctor}"
+        <form action="#" th:action="@{/doctor/new/{userId}(userId=${User.getId()})}" th:object="${doctor}"
               method="post">
 
             <div class="form-group">

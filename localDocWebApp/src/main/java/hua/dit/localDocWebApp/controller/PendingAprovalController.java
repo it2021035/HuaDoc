@@ -3,8 +3,13 @@ package hua.dit.localDocWebApp.controller;
 import hua.dit.localDocWebApp.entity.Client;
 import hua.dit.localDocWebApp.entity.Doctor;
 import hua.dit.localDocWebApp.entity.PendingAproval;
+import hua.dit.localDocWebApp.entity.User;
 import hua.dit.localDocWebApp.service.PendingAprovalService;
+import hua.dit.localDocWebApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +23,9 @@ public class PendingAprovalController {
 
     @Autowired
     private PendingAprovalService pendingAprovalService;
+
+    @Autowired
+    private UserService userService;
 
     //this puts the client in the pending list for the chosen doctor
     //happened when the client clicks the button "request aproval" in the doctor list
@@ -48,7 +56,12 @@ public class PendingAprovalController {
     //shows all the doctors with pending aprovals
     @GetMapping("/show")
     public String showPendingAproval(Model model){
-        model.addAttribute("pendingAprovals", pendingAprovalService.getPendingAprovals());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername();
+        User user = userService.getUserByEmail(email);
+
+        model.addAttribute("pendingAprovals", pendingAprovalService.getPendingAprovals(user));
         return "pending_doctor_list";
     }
     //shows all the clients with pending aprovals for a specific doctor

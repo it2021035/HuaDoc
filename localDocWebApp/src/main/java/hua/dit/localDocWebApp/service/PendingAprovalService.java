@@ -3,6 +3,7 @@ package hua.dit.localDocWebApp.service;
 import hua.dit.localDocWebApp.entity.Client;
 import hua.dit.localDocWebApp.entity.Doctor;
 import hua.dit.localDocWebApp.entity.PendingAproval;
+import hua.dit.localDocWebApp.entity.User;
 import hua.dit.localDocWebApp.repository.DoctorRepository;
 import hua.dit.localDocWebApp.repository.PendingAprovalRepository;
 import jakarta.transaction.Transactional;
@@ -39,7 +40,7 @@ public class PendingAprovalService {
 
     //returns all the doctors that have pending aprovals
     @Transactional
-    public List<PendingAproval> getPendingAprovals(){
+    public List<PendingAproval> getPendingAprovals(User user){
 
         List<PendingAproval> temp = pendingAprovalRepository.findAll();
         for (int i = 0; i < temp.size(); i++) { //removes duplicates
@@ -54,7 +55,17 @@ public class PendingAprovalService {
             }
         }
 
-        return temp;
+        //makes a new list that contains only doctors with the user id
+        List<PendingAproval> temp2 = new ArrayList<>();
+        for (int i = 0; i < temp.size(); i++) {
+            if(temp.get(i).getDoctor().getUser() != null){
+                if(Objects.equals(temp.get(i).getDoctor().getUser().getId(), user.getId())){
+                    temp2.add(temp.get(i));
+                }
+            }
+        }
+
+        return temp2;
 
     }
 

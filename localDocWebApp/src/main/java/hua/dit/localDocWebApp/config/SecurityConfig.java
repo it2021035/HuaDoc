@@ -37,7 +37,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/", "/home","/register","/saveUser").permitAll()
-                        .requestMatchers("/client/new","/client/list","/doctor/list","/family/**").hasRole("CLIENT")
+                        .requestMatchers("/client/new","/client/list","/doctor/list","/family/**", "pending/insert/**").hasRole("CLIENT")
                         .requestMatchers("/doctor/new","/pending/**").hasRole("DOCTOR")
                         .requestMatchers("/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").permitAll()

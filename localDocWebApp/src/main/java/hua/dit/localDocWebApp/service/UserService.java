@@ -1,5 +1,6 @@
 package hua.dit.localDocWebApp.service;
 
+import hua.dit.localDocWebApp.entity.Client;
 import hua.dit.localDocWebApp.entity.Role;
 import hua.dit.localDocWebApp.entity.User;
 import hua.dit.localDocWebApp.repository.RoleRepository;
@@ -45,6 +46,8 @@ public class UserService implements UserDetailsService {
         user = userRepository.save(user);
         return user.getId();
     }
+
+
     @Transactional
     public void deleteUser(User user){
         userRepository.delete(user);
@@ -74,6 +77,13 @@ public class UserService implements UserDetailsService {
             );
         }
     }
+
+    @Transactional
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+
 
     @Transactional
     public Object getUsers() {
