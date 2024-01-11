@@ -71,7 +71,7 @@ public class ClientController {
         String email = userDetails.getUsername();
         User user = userService.getUserByEmail(email);
         model.addAttribute("User", user);
-        model.addAttribute("clients", clientService.getClientsByUserId(user));
+        model.addAttribute("clients", clientService.getClientsByUser(user));
         return "client_list";
     }
     //

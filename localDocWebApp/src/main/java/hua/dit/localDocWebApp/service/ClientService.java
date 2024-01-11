@@ -47,7 +47,7 @@ public class ClientService {
     }
 
     @Transactional
-    public Iterable<Client> getClientsByUserId(User user){
+    public List<Client> getClientsByUser(User user){
         return clientRepository.findByUser(user);
     }
 
