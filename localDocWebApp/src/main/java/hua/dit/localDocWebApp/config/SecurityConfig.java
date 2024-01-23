@@ -36,8 +36,8 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/home","/register","/saveUser").permitAll()
-                        .requestMatchers("/client/new","/client/list","/doctor/list","/family/**", "pending/insert/**").hasRole("CLIENT")
+                        .requestMatchers("/", "/home","/register","/saveUser","/api/auth/**").permitAll()
+                        .requestMatchers("/client/new","/client/list","/doctor/list","/family/**", "pending/insert/**","api/client/**").hasRole("CLIENT")
                         .requestMatchers("/doctor/new","/pending/**").hasRole("DOCTOR")
                         .requestMatchers("/users/**").hasRole("ADMIN")
                         .requestMatchers("/api/**").permitAll()

@@ -1,6 +1,7 @@
 package hua.dit.localDocWebApp.rest;
 
 import hua.dit.localDocWebApp.entity.Client;
+import hua.dit.localDocWebApp.entity.Doctor;
 import hua.dit.localDocWebApp.entity.User;
 import hua.dit.localDocWebApp.service.ClientService;
 import hua.dit.localDocWebApp.service.DoctorService;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,16 +40,26 @@ public class ClientRestController {
         return clients != null ? ResponseEntity.ok(clients) : ResponseEntity.notFound().build();
     }
 
-    //@PostMapping("")
-    //public Client saveClient(@RequestBody Client client) {
-      //  return clientService.saveClient(client);
-    //}
+    @GetMapping("/list/{id}")
+    public ResponseEntity<Client> getClient(@PathVariable Integer id) {
+        Client client = clientService.getClient(id);
+        return client != null ? ResponseEntity.ok(client) : ResponseEntity.notFound().build();
+    }
+
 
     @PostMapping("/list/{client_id}/removeDoc/{doctor_id}")
     public Client removeClientDoctor(@PathVariable Integer client_id, @PathVariable Integer doctor_id){
         Client client = clientService.removeClientDoctor(client_id);
         doctorService.decreaseCurrentPatients(doctor_id);
         return client;
+    }
+
+    @GetMapping("/list/doc/{postalCode}/{client_id}")
+    public ResponseEntity<Doctor> showDocList(@PathVariable String postalCode, @PathVariable Integer client_id){
+        Iterable<Doctor> doctors = doctorService.getDoctorByPostalCode(postalCode);
+
+        return ResponseEntity.ok((Doctor) doctors);
+
     }
 
     @GetMapping("/new")
