@@ -29,14 +29,14 @@ public class UserService implements UserDetailsService {
     @Autowired
     private RoleRepository roleRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    //@Autowired
+    //private BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
-    public Integer saveUser(User user) {
+    public Long saveUser(User user) {
         String passwd= user.getPassword();
-        String encodedPasswod = passwordEncoder.encode(passwd);
-        user.setPassword(encodedPasswod);
+        //String encodedPasswod = passwordEncoder.encode(passwd);
+        //user.setPassword(encodedPasswod);
 
         Role role = roleRepository.findByName(user.getRole())
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -54,7 +54,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public Integer updateUser(User user) {
+    public Long updateUser(User user) {
         user = userRepository.save(user);
         return user.getId();
     }
