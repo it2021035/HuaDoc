@@ -10,6 +10,7 @@ import hua.dit.localDocWebApp.payload.response.MessageResponse;
 import hua.dit.localDocWebApp.repository.RoleRepository;
 import hua.dit.localDocWebApp.repository.UserRepository;
 import hua.dit.localDocWebApp.service.UserDetailsImpl;
+import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +45,25 @@ public class AuthController {
 
     @Autowired
     JwtUtils jwtUtils;
+
+
+    @PostConstruct
+    public void setup(){
+        roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
+            roleRepository.save(new Role("ROLE_ADMIN"));
+            return null;
+        });
+        roleRepository.findByName("ROLE_CLIENT").orElseGet(() -> {
+            roleRepository.save(new Role("ROLE_CLIENT"));
+            return null;
+        });
+        roleRepository.findByName("ROLE_DOCTOR").orElseGet(() -> {
+            roleRepository.save(new Role("ROLE_DOCTOR"));
+            return null;
+        });
+
+    }
+
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
