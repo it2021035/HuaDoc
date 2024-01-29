@@ -73,7 +73,7 @@ public class PendingAprovalService {
     @Transactional
     public List<PendingAproval> showClientsOfDoctor(Integer id){
         List<PendingAproval> temp = pendingAprovalRepository.findAll();
-        //removes the duplicates of the same combination clien_id and doctor_id
+        //removes the duplicates of the same combination client_id and doctor_id
         for (int i = 0; i < temp.size(); i++) {
             Integer currentElementClient = temp.get(i).getClient().getId();
             Integer currentElementDoctor = temp.get(i).getDoctor().getId();
@@ -109,12 +109,12 @@ public class PendingAprovalService {
         //inserts the doctor id in the client doctord_id column
         List<PendingAproval> temp = pendingAprovalRepository.findAll();
         Client client = clientService.getClient(clientId);
-        Doctor doctor = doctorRepository.findById(doctorId).get(); //FIX THIS LATER
-        client.setDoctor(doctor);
+        //Doctor doctor = doctorRepository.findById(doctorId).get(); //FIX THIS LATER
+        //client.setDoctor(doctor);
         clientService.saveClient(client);
         //increases the current clients of the doctor
-        doctor.setCurrentClients(doctor.getCurrentClients()+1);
-        doctorRepository.save(doctor); //FIX THIS LATER
+        //doctor.setCurrentClients(doctor.getCurrentClients()+1);
+        //doctorRepository.save(doctor); //FIX THIS LATER
 
         //
         //removes the pending aproval for eveyone if that client id

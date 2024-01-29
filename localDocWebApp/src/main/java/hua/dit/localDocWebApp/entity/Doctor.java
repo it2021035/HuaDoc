@@ -48,8 +48,6 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Client> client;
 
-    @OneToMany(mappedBy = "doctor", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<PendingAproval> pendingAproval;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="user_id")
@@ -87,17 +85,11 @@ public class Doctor {
     }
 
 
-    public void setPendingAproval(List<PendingAproval> pendingAproval) {
-        this.pendingAproval = pendingAproval;
-    }
 
     public void setUser(User user) {
         this.user = user;
     }
 
-    public List<PendingAproval> getPendingAproval() {
-        return pendingAproval;
-    }
 
     public User getUser() {
         return user;

@@ -3,9 +3,9 @@ package hua.dit.localDocWebApp.rest;
 import hua.dit.localDocWebApp.entity.Client;
 import hua.dit.localDocWebApp.entity.Doctor;
 import hua.dit.localDocWebApp.entity.User;
+import hua.dit.localDocWebApp.repository.UserRepository;
 import hua.dit.localDocWebApp.service.ClientService;
 import hua.dit.localDocWebApp.service.DoctorService;
-import hua.dit.localDocWebApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/client")
@@ -28,14 +29,14 @@ public class ClientRestController {
     private DoctorService doctorService;
 
     @Autowired
-    UserService userService;
+    private UserRepository userRepository;
 
     @GetMapping("/list")
     public ResponseEntity<List<Client>> showClientList() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        String email = userDetails.getUsername();
-        User user = userService.getUserByEmail(email);
+        String userName = userDetails.getUsername();
+        User user = userRepository.findByUsername(userName);
         List<Client> clients = clientService.getClientsByUser(user);
         return clients != null ? ResponseEntity.ok(clients) : ResponseEntity.notFound().build();
     }
@@ -62,21 +63,14 @@ public class ClientRestController {
 
     }
 
-    @GetMapping("/new")
-    @ResponseBody
-    public ResponseEntity<Client> addClient() {
-        Client client = new Client();
 
-        return ResponseEntity.ok(client);
-    }
-
-    @PostMapping("/new")
+    @PostMapping("/saveClient")
     public ResponseEntity<String> saveClient(@RequestBody Client client) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String email = userDetails.getUsername();
-            User user = userService.getUserByEmail(email);
+            String userName = userDetails.getUsername();
+            User user = userRepository.findByUsername(userName);
             client.setUser(user);
             clientService.saveClient(client);
             return ResponseEntity.ok("Client saved successfully");

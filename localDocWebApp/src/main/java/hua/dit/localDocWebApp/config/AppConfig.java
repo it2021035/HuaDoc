@@ -7,14 +7,13 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+
 @Configuration
 public class AppConfig {
-
 
     private SecurityScheme createAPIKeyScheme() {
         return new SecurityScheme().type(SecurityScheme.Type.HTTP)
@@ -22,22 +21,20 @@ public class AppConfig {
                 .scheme("bearer");
     }
 
-
     @Bean
     public OpenAPI openAPI() {
-        return new OpenAPI()
-                .addSecurityItem(new SecurityRequirement().addList("BearerAuth"))
-                .components(new Components()
-                        .addSecuritySchemes("BearerAuth", createAPIKeyScheme()))
-                .info(new Info()
-                        .title("LOCALDOCWEBAPP 2023 REST API")
-                        .description("This API is used for our LocalDocWebApp")
-                        .version("1.0")
-                        .license(new io.swagger.v3.oas.models.info.License()
-                                .name("License of API")
+        OpenAPI info = new OpenAPI().addSecurityItem(new SecurityRequirement().
+                        addList("Bearer Authentication"))
+                .components(new Components().addSecuritySchemes
+                        ("Bearer Authentication", createAPIKeyScheme()))
+                .info(new Info().title("DS LAB 2023 REST API")
+                        .description("This API is used in dl-lab-2023 project")
+                        .version("1.0").contact(new Contact().name("Anargyros Tsadimas")
+                                .email("tsadimas@hua.gr").url("https://tsadimas.github.io"))
+                        .license(new License().name("License of API")
                                 .url("https://swagger.io/license/")));
+        return info;
     }
-
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

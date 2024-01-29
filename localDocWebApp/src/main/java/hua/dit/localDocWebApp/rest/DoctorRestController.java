@@ -2,9 +2,11 @@ package hua.dit.localDocWebApp.rest;
 
 import hua.dit.localDocWebApp.entity.Client;
 import hua.dit.localDocWebApp.entity.Doctor;
+import hua.dit.localDocWebApp.entity.PendingAproval;
 import hua.dit.localDocWebApp.entity.User;
+import hua.dit.localDocWebApp.repository.UserRepository;
 import hua.dit.localDocWebApp.service.DoctorService;
-import hua.dit.localDocWebApp.service.UserService;
+import hua.dit.localDocWebApp.service.PendingAprovalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -26,24 +28,20 @@ public class DoctorRestController {
     private DoctorService doctorService;
 
     @Autowired
-    UserService userService;
+    private UserRepository userRepository;
 
-    @GetMapping("/new")
-    @ResponseBody
-    public ResponseEntity<Doctor> addDoctor() {
-        Doctor doctor = new Doctor();
-
-        return ResponseEntity.ok(doctor);
-    }
+    @Autowired
+    private PendingAprovalService pendingAprovalService;
 
 
-    @PostMapping("/new")
+
+    @PostMapping("/saveDoctor")
     public ResponseEntity<String> saveDoctor(@RequestBody Doctor doctor) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String email = userDetails.getUsername();
-            User user = userService.getUserByEmail(email);
+            String userName = userDetails.getUsername();
+            User user = userRepository.findByUsername(userName);
             doctor.setUser(user);
             doctorService.saveDoctor(doctor);
             return ResponseEntity.ok("Doctor saved successfully");
@@ -57,4 +55,5 @@ public class DoctorRestController {
         Iterable<Doctor> doctors = doctorService.getDoctors();
         return ResponseEntity.ok((Doctor) doctors);
     }
+
 }

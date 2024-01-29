@@ -1,4 +1,5 @@
-package hua.dit.localDocWebApp.payload;
+package hua.dit.localDocWebApp.payload.response;
+
 
 public class MessageResponse {
     private String message;
