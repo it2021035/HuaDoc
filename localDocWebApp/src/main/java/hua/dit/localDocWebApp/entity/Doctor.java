@@ -45,22 +45,11 @@ public class Doctor {
     @Column
     private Integer currentClients;
 
-    @OneToMany(mappedBy = "doctor", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    private List<Client> client;
-
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="user_id")
     private User user;
 
-
-    public void setClient(List<Client> client) {
-        this.client = client;
-    }
-
-    public List<Client> getClient() {
-        return client;
-    }
 
 
     public Doctor() {
