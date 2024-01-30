@@ -60,25 +60,17 @@ public class Client {
         this.user = user;
     }
 
-    public void setFamily(List<Family> family) {
-        this.family = family;
-    }
 
     public User getUser() {
         return user;
     }
 
-    public List<Family> getFamily() {
-        return family;
-    }
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name="user_id")
     private User user;
 
 
-    @OneToMany(mappedBy = "client", cascade = {CascadeType.ALL})
-    private List<Family> family;
 
 
     public void setDoctor(Doctor doctor) {

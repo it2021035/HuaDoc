@@ -74,7 +74,7 @@ public class PendingAprovalRestController {
     @PostMapping("/show/{doctorId}/{clientId}/decline")
     public ResponseEntity<String> declineClient(@PathVariable Integer doctorId, @PathVariable Integer clientId){
         pendingAprovalService.deleteClient(doctorId, clientId);
-        return ResponseEntity.ok("Client accepted successfully");
+        return ResponseEntity.ok("Client declined successfully");
     }
 
 

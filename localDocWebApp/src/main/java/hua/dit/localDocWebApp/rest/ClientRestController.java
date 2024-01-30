@@ -49,17 +49,17 @@ public class ClientRestController {
 
 
     @PostMapping("/list/{client_id}/removeDoc/{doctor_id}")
-    public Client removeClientDoctor(@PathVariable Integer client_id, @PathVariable Integer doctor_id){
+    public ResponseEntity<String> removeClientDoctor(@PathVariable Integer client_id, @PathVariable Integer doctor_id){
         Client client = clientService.removeClientDoctor(client_id);
         doctorService.decreaseCurrentPatients(doctor_id);
-        return client;
+        return ResponseEntity.ok("Doctor removed successfully");
     }
 
     @GetMapping("/list/doc/{postalCode}/{client_id}")
-    public ResponseEntity<Doctor> showDocList(@PathVariable String postalCode, @PathVariable Integer client_id){
+    public ResponseEntity<List<Doctor>> showDocList(@PathVariable String postalCode, @PathVariable Integer client_id){
         Iterable<Doctor> doctors = doctorService.getDoctorByPostalCode(postalCode);
 
-        return ResponseEntity.ok((Doctor) doctors);
+        return doctors != null ? ResponseEntity.ok((List<Doctor>) doctors) : ResponseEntity.notFound().build();
 
     }
 

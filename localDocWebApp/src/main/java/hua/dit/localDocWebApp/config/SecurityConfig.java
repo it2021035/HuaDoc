@@ -59,8 +59,9 @@ public class SecurityConfig {
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        .requestMatchers("/api/client/**", "/api/pending/insert/**").hasRole("CLIENT")
+                        .requestMatchers("/api/client/**", "/api/pending/insert/**", "/api/family/**").hasRole("CLIENT")
                         .requestMatchers("/api/doctor", "/api/pending/show", "/api/pending/show/**").hasRole("DOCTOR")
+                        .requestMatchers("/api/admin/**","/api/client/**","/api/doctor/**","/api/pending/**","/api/family/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

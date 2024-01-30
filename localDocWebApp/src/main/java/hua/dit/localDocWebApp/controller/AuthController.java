@@ -47,23 +47,6 @@ public class AuthController {
     JwtUtils jwtUtils;
 
 
-    @PostConstruct
-    public void setup(){
-        roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
-            roleRepository.save(new Role("ROLE_ADMIN"));
-            return null;
-        });
-        roleRepository.findByName("ROLE_CLIENT").orElseGet(() -> {
-            roleRepository.save(new Role("ROLE_CLIENT"));
-            return null;
-        });
-        roleRepository.findByName("ROLE_DOCTOR").orElseGet(() -> {
-            roleRepository.save(new Role("ROLE_DOCTOR"));
-            return null;
-        });
-
-    }
-
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {

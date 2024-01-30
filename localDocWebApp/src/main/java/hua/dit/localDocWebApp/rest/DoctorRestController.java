@@ -30,9 +30,6 @@ public class DoctorRestController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private PendingAprovalService pendingAprovalService;
-
 
 
     @PostMapping("/saveDoctor")
