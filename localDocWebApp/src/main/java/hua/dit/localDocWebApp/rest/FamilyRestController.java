@@ -48,10 +48,9 @@ public class FamilyRestController {
     }
 
     @PostMapping("/{familyId}/{clientId}/edit")
-    public ResponseEntity<String> removeAndReApplyFamilyMember(@PathVariable Integer client_id,@RequestBody Family family) {
-        Integer familyId = family.getId();
+    public ResponseEntity<String> removeAndReApplyFamilyMember(@PathVariable Integer clientId,@PathVariable Integer familyId,@RequestBody Family family) {
         familyService.deleteFamilyMember(familyId);
-        family.setClient(clientService.getClient(client_id));
+        family.setClient(clientService.getClient(clientId));
         familyService.saveFamilyMember(family);
         return ResponseEntity.ok("Family member Edited successfully");
     }
