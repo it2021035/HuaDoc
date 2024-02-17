@@ -7,6 +7,7 @@ import hua.dit.localDocWebApp.repository.UserRepository;
 import hua.dit.localDocWebApp.service.ClientService;
 import hua.dit.localDocWebApp.service.DoctorService;
 import hua.dit.localDocWebApp.service.FamilyService;
+import hua.dit.localDocWebApp.service.PendingAprovalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +31,16 @@ public class AdminRestController {
     @Autowired
     private FamilyService familyService;
 
+    @Autowired
+    private PendingAprovalService pendingAprovalService;
+
     @GetMapping("/users")
     public ResponseEntity<List<User>> showUsers(){
         List<User> users = userRepository.findAll();
         return users != null ? ResponseEntity.ok((users)) : ResponseEntity.notFound().build();
     }
 
-    //does not work yet because foreign key exception
+
     @PostMapping("/users/{userId}/remove")
     public ResponseEntity<String> removeUser(@PathVariable Long userId){
         Set<Role> roles = userRepository.findById(userId).get().getRoles();
@@ -52,6 +56,14 @@ public class AdminRestController {
                         familyService.deleteFamilyMember(family.getId());
                         }
                     }
+                    Iterable<PendingAproval> pendingAprovals = pendingAprovalService.getAllPendingAprovals();
+                    if(pendingAprovals != null){
+                        for(PendingAproval pendingAproval : pendingAprovals){
+                            if(Objects.equals(pendingAproval.getClient().getId(), client.getId())){
+                                pendingAprovalService.deletePendingAproval(pendingAproval.getId());
+                            }
+                        }
+                    }
                     clientService.deleteClient(client.getId());
                 }
             }
@@ -60,6 +72,14 @@ public class AdminRestController {
             Iterable<Doctor> doctors = doctorService.getDoctors();
             for(Doctor doctor : doctors){
                 if(Objects.equals(doctor.getUser().getId(), userId)){
+                    Iterable<PendingAproval> pendingAprovals = pendingAprovalService.getAllPendingAprovals();
+                    if(pendingAprovals != null){
+                        for(PendingAproval pendingAproval : pendingAprovals){
+                            if(Objects.equals(pendingAproval.getDoctor().getId(), doctor.getId())){
+                                pendingAprovalService.deletePendingAproval(pendingAproval.getId());
+                            }
+                        }
+                    }
                     doctorService.deleteDoctor(doctor.getId());
                 }
             }

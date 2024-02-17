@@ -1,16 +1,10 @@
 package hua.dit.localDocWebApp.service;
 
-import hua.dit.localDocWebApp.entity.Client;
-import hua.dit.localDocWebApp.entity.Doctor;
-import hua.dit.localDocWebApp.entity.Role;
-import hua.dit.localDocWebApp.repository.ClientRepository;
-import hua.dit.localDocWebApp.repository.DoctorRepository;
-import hua.dit.localDocWebApp.repository.RoleRepository;
+import hua.dit.localDocWebApp.entity.*;
+import hua.dit.localDocWebApp.repository.*;
 import jakarta.annotation.PostConstruct;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import hua.dit.localDocWebApp.repository.UserRepository;
-import hua.dit.localDocWebApp.entity.User;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -24,13 +18,15 @@ public class InitialDataService {
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
     private final DoctorRepository doctorRepository;
+    private final FamilyRepository familyRepository;
 
-    public InitialDataService(RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, ClientRepository clientRepository, DoctorRepository doctorRepository) {
+    public InitialDataService(RoleRepository roleRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, ClientRepository clientRepository, DoctorRepository doctorRepository, FamilyRepository familyRepository) {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.clientRepository = clientRepository;
         this.doctorRepository = doctorRepository;
+        this.familyRepository = familyRepository;
     }
 
     private void createUsersAndRoles() {
@@ -75,11 +71,11 @@ public class InitialDataService {
     }
 
     private void createClient() {
-        Optional<Client> client = clientRepository.findById(1);
+        Optional<Client> client = clientRepository.findByEmail("John@gmail.com").stream().findFirst();
         //if client does not exist
         if (!client.isPresent()) {
             Client client1 = new Client();
-            client1.setId(1);
+            client1.setId(9999);
             client1.setFirstName("John");
             client1.setLastName("Doe");
             client1.setAddress("Somewhere");
@@ -94,11 +90,11 @@ public class InitialDataService {
     }
 
     private void createDoctor() {
-        Optional<Doctor> doctor = doctorRepository.findById(1);
+        Optional<Doctor> doctor = doctorRepository.findByEmail("someone@gmail.com").stream().findFirst();
         //if client does not exist
         if (!doctor.isPresent()) {
             Doctor doctor1 = new Doctor();
-            doctor1.setId(1);
+            doctor1.setId(9999);
             doctor1.setFirstName("Larry");
             doctor1.setLastName("Balls");
             doctor1.setAddress("Somewhere");
@@ -114,10 +110,29 @@ public class InitialDataService {
 
         }
     }
+
+
+    private void createFamily() {
+        Optional<Client> client = clientRepository.findByEmail("John@gmail.com").stream().findFirst();
+        Client client1 = client.get();
+        Optional<Family> family = familyRepository.findByClient(client1).stream().findFirst();
+        if (!family.isPresent()) {
+            Family family1 = new Family();
+            family1.setId(9999);
+            family1.setFirstName("Jane");
+            family1.setLastName("Doe");
+            family1.setBirthDate("01/01/2000");
+            family1.setRelation("Daughter");
+            family1.setGender("F");
+            family1.setClient(client1);
+            familyRepository.save(family1);
+        }
+    }
     @PostConstruct
     public void setup() {
         this.createUsersAndRoles();
         this.createClient();
         this.createDoctor();
+        this.createFamily();
     }
 }

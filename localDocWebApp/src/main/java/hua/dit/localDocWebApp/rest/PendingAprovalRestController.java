@@ -67,8 +67,8 @@ public class PendingAprovalRestController {
 
     @PostMapping("/show/{doctorId}/{clientId}")
     public ResponseEntity<String> acceptClient(@PathVariable Integer doctorId, @PathVariable Integer clientId){
-        pendingAprovalService.acceptClient(doctorId, clientId);
-        return ResponseEntity.ok("Client accepted successfully");
+        String result = pendingAprovalService.acceptClient(doctorId, clientId);
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/show/{doctorId}/{clientId}/decline")

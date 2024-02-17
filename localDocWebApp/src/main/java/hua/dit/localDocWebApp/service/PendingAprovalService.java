@@ -38,6 +38,12 @@ public class PendingAprovalService {
     }
 
 
+    @Transactional
+    public List<PendingAproval> getAllPendingAprovals(){
+        return pendingAprovalRepository.findAll();
+    }
+
+
     //returns all the doctors that have pending aprovals
     @Transactional
     public List<PendingAproval> getPendingAprovals(User user){
@@ -102,23 +108,28 @@ public class PendingAprovalService {
 
 
     @Transactional
-    public void acceptClient(Integer doctorId, Integer clientId){
+    public String acceptClient(Integer doctorId, Integer clientId){
         //inserts the doctor id in the client doctord_id column
         List<PendingAproval> temp = pendingAprovalRepository.findAll();
         Client client = clientService.getClient(clientId);
         Doctor doctor = doctorRepository.findById(doctorId).get(); //FIX THIS LATER
-        client.setDoctor(doctor);
-        clientService.saveClient(client);
-        //increases the current clients of the doctor
-        doctor.setCurrentClients(doctor.getCurrentClients()+1);
-        doctorRepository.save(doctor); //FIX THIS LATER
+        if(doctor.getCurrentClients() < doctor.getMaxClients()) {
+            client.setDoctor(doctor);
+            clientService.saveClient(client);
+            //increases the current clients of the doctor
+            doctor.setCurrentClients(doctor.getCurrentClients() + 1);
+            doctorRepository.save(doctor); //FIX THIS LATER
 
 
-        //removes the pending aproval for eveyone if that client id
-        for (int i = 0; i < temp.size(); i++) {
-            if(Objects.equals(temp.get(i).getClient().getId(), clientId)){
-                pendingAprovalRepository.deleteById(temp.get(i).getId());
+            //removes the pending aproval for eveyone if that client id
+            for (int i = 0; i < temp.size(); i++) {
+                if (Objects.equals(temp.get(i).getClient().getId(), clientId)) {
+                    pendingAprovalRepository.deleteById(temp.get(i).getId());
+                }
             }
+            return "Client Accepted";
+        }else{
+            return "Doctor is full. Can't accept client";
         }
 
     }
