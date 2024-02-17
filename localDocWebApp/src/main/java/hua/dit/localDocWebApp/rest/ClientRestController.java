@@ -32,7 +32,7 @@ public class ClientRestController {
     private UserRepository userRepository;
 
     @GetMapping("/list")
-    public ResponseEntity<List<Client>> showClientList() {
+    public ResponseEntity<List<Client>> showClientList() { //shows all the clients of the user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         String userName = userDetails.getUsername();
@@ -41,37 +41,30 @@ public class ClientRestController {
         return clients != null ? ResponseEntity.ok(clients) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/list/{id}")
+    @GetMapping("/list/{id}") //shows the client with the specific id
     public ResponseEntity<Client> getClient(@PathVariable Integer id) {
         Client client = clientService.getClient(id);
         return client != null ? ResponseEntity.ok(client) : ResponseEntity.notFound().build();
     }
 
 
-    @PostMapping("/list/{client_id}/removeDoc/{doctor_id}")
+    @PostMapping("/list/{client_id}/removeDoc/{doctor_id}") //removes the doctor from the client
     public ResponseEntity<String> removeClientDoctor(@PathVariable Integer client_id, @PathVariable Integer doctor_id){
         Client client = clientService.removeClientDoctor(client_id);
         doctorService.decreaseCurrentPatients(doctor_id);
         return ResponseEntity.ok("Doctor removed successfully");
     }
 
-    @GetMapping("/list/doc/{postalCode}/{client_id}")
+    @GetMapping("/list/doc/{postalCode}/{client_id}") //shows the doctors of the specific postal code
     public ResponseEntity<List<Doctor>> showDocList(@PathVariable String postalCode, @PathVariable Integer client_id){
         Iterable<Doctor> doctors = doctorService.getDoctorByPostalCode(postalCode);
-        List<Doctor> doctorsList = (List<Doctor>) doctors;
-        for (Doctor doctor : doctors) {
-            if(doctor.getCurrentClients() >= doctor.getMaxClients()){
-                doctorsList.add(doctor);
-            }
-        }
-
-        return doctorsList != null ? ResponseEntity.ok(doctorsList) : ResponseEntity.notFound().build();
+        return doctors != null ? ResponseEntity.ok((List<Doctor>) doctors) : ResponseEntity.notFound().build();
 
     }
 
 
     @PostMapping("/saveClient")
-    public ResponseEntity<String> saveClient(@RequestBody Client client) {
+    public ResponseEntity<String> saveClient(@RequestBody Client client) { //saves the client
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();

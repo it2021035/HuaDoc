@@ -28,7 +28,7 @@ public class PendingAprovalRestController {
 
 
     //this is for the client to see
-    @PostMapping("/insert/{clientId}/{doctorId}")
+    @PostMapping("/insert/{clientId}/{doctorId}") //inserts a pending aproval
     public ResponseEntity<String> insertPendingAproval(@PathVariable Integer clientId, @PathVariable Integer doctorId){
         Client client = new Client();
         client.setId(clientId);
@@ -39,7 +39,7 @@ public class PendingAprovalRestController {
     }
 
     //this is for the doctor to see
-    @GetMapping("/show")
+    @GetMapping("/show") //shows all the doctors with pending aprovals
     public ResponseEntity<List<Doctor>> showPendingAproval(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
@@ -65,13 +65,13 @@ public class PendingAprovalRestController {
         return clients != null ? ResponseEntity.ok(clients) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/show/{doctorId}/{clientId}")
+    @PostMapping("/show/{doctorId}/{clientId}") //accepts the client
     public ResponseEntity<String> acceptClient(@PathVariable Integer doctorId, @PathVariable Integer clientId){
         String result = pendingAprovalService.acceptClient(doctorId, clientId);
         return ResponseEntity.ok(result);
     }
 
-    @PostMapping("/show/{doctorId}/{clientId}/decline")
+    @PostMapping("/show/{doctorId}/{clientId}/decline") //declines the client
     public ResponseEntity<String> declineClient(@PathVariable Integer doctorId, @PathVariable Integer clientId){
         pendingAprovalService.deleteClient(doctorId, clientId);
         return ResponseEntity.ok("Client declined successfully");

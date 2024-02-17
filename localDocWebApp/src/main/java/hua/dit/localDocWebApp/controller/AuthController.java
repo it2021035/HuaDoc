@@ -48,22 +48,22 @@ public class AuthController {
 
 
 
-    @PostMapping("/signin")
+    @PostMapping("/signin") //sign in
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         System.out.println("authentication");
 
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword())); //authenticates the user
         System.out.println("authentication: " + authentication);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication); //sets the authentication
         System.out.println("post authentication");
-        String jwt = jwtUtils.generateJwtToken(authentication);
+        String jwt = jwtUtils.generateJwtToken(authentication);//generates the jwt token
         System.out.println("jw: " + jwt);
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal(); //gets the user details
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()); //gets the roles of the user
 
         return ResponseEntity.ok(new JwtResponse(jwt,
                 userDetails.getId(),
@@ -72,15 +72,15 @@ public class AuthController {
                 roles));
     }
 
-    @PostMapping("/signup")
+    @PostMapping("/signup") //sign up
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+        if (userRepository.existsByUsername(signUpRequest.getUsername())) { //checks if the username already exists
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Username is already taken!"));
         }
 
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+        if (userRepository.existsByEmail(signUpRequest.getEmail())) {//checks if the email already exists
             return ResponseEntity
                     .badRequest()
                     .body(new MessageResponse("Error: Email is already in use!"));
@@ -93,11 +93,11 @@ public class AuthController {
 
         Set<Role> roles = new HashSet<>();
 
-        if (signUpRequest.getUserRole() == null) {
+        if (signUpRequest.getUserRole() == null) { //if the user role is not defined, it is a client
             Role userRole = roleRepository.findByName("ROLE_CLIENT")
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
             roles.add(userRole);
-        } else {
+        } else { //if the user role is defined, it is either a doctor or an admin
                 switch (signUpRequest.getUserRole()) {
                     case "ROLE_ADMIN":
                         Role adminRole = roleRepository.findByName("ROLE_ADMIN")
@@ -119,7 +119,7 @@ public class AuthController {
         }
 
         user.setRoles(roles);
-        userRepository.save(user);
+        userRepository.save(user); //saves the user
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
     }

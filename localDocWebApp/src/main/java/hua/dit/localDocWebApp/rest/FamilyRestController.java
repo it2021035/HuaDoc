@@ -20,7 +20,7 @@ public class FamilyRestController {
     private ClientService clientService;
 
 
-    @GetMapping("/list/{client_id}")
+    @GetMapping("/list/{client_id}") //shows the family members of the specific client
     public ResponseEntity<List<Family>> listFamilyMembers(@PathVariable Integer client_id) {
         Iterable<Family> familyList = familyService.getFamilyMembers(client_id);
         return familyList != null ? ResponseEntity.ok((List<Family>) familyList) : ResponseEntity.notFound().build();
@@ -41,13 +41,13 @@ public class FamilyRestController {
     }
 
 
-    @GetMapping("/{familyId}")
+    @GetMapping("/{familyId}") //shows the family member with the specific id
     public ResponseEntity<Family> editFamilyMember(@PathVariable Integer familyId) {
         Family family =  familyService.getFamilyMember(familyId);
         return family != null ? ResponseEntity.ok(family) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/{familyId}/{clientId}/edit")
+    @PostMapping("/{familyId}/{clientId}/edit") //removes the family member and re-applies it
     public ResponseEntity<String> removeAndReApplyFamilyMember(@PathVariable Integer clientId,@PathVariable Integer familyId,@RequestBody Family family) {
         familyService.deleteFamilyMember(familyId);
         family.setClient(clientService.getClient(clientId));

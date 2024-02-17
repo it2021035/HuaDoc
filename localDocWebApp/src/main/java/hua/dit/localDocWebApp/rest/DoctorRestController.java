@@ -32,7 +32,7 @@ public class DoctorRestController {
 
 
 
-    @PostMapping("/saveDoctor")
+    @PostMapping("/saveDoctor") //save doctor
     public ResponseEntity<String> saveDoctor(@RequestBody Doctor doctor) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -47,7 +47,7 @@ public class DoctorRestController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping("/list") //shows all the doctors
     public ResponseEntity<Doctor> showDocList(Model model){
         Iterable<Doctor> doctors = doctorService.getDoctors();
         return ResponseEntity.ok((Doctor) doctors);

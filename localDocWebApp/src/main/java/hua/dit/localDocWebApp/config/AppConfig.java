@@ -22,7 +22,7 @@ public class AppConfig {
     }
 
     @Bean
-    public OpenAPI openAPI() {
+    public OpenAPI openAPI() { //this is for swagger
         OpenAPI info = new OpenAPI().addSecurityItem(new SecurityRequirement().
                         addList("Bearer Authentication"))
                 .components(new Components().addSecuritySchemes
