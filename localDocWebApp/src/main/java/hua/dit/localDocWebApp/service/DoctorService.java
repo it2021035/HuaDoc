@@ -24,22 +24,22 @@ public class DoctorService {
     @Transactional
     public void deleteDoctor(Integer id){
         doctorRepository.deleteById(id);
-    }
+    } //detetes doctor
 
     @Transactional
     public void saveDoctor(Doctor doctor){
         doctorRepository.save(doctor);
-    }
+    } //saves doctor
 
     @Transactional
     public Doctor getDoctor(Integer id){
         return doctorRepository.findById(id).get();
-    }
+    } //get doctor from id
 
     @Transactional
     public Iterable<Doctor> getDoctors(){
         return doctorRepository.findAll();
-    }
+    } //get all doctors
 
     //get all doctors that have the same postal code as the client
     @Transactional

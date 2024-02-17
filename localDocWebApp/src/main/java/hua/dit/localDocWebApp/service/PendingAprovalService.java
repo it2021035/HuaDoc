@@ -112,13 +112,13 @@ public class PendingAprovalService {
         //inserts the doctor id in the client doctord_id column
         List<PendingAproval> temp = pendingAprovalRepository.findAll();
         Client client = clientService.getClient(clientId);
-        Doctor doctor = doctorRepository.findById(doctorId).get(); //FIX THIS LATER
-        if(doctor.getCurrentClients() < doctor.getMaxClients()) {
+        Doctor doctor = doctorRepository.findById(doctorId).get();
+        if(doctor.getCurrentClients() < doctor.getMaxClients()) { //if doctor is not full
             client.setDoctor(doctor);
             clientService.saveClient(client);
             //increases the current clients of the doctor
             doctor.setCurrentClients(doctor.getCurrentClients() + 1);
-            doctorRepository.save(doctor); //FIX THIS LATER
+            doctorRepository.save(doctor);
 
 
             //removes the pending aproval for eveyone if that client id
@@ -128,7 +128,7 @@ public class PendingAprovalService {
                 }
             }
             return "Client Accepted";
-        }else{
+        }else{ //if is full
             return "Doctor is full. Can't accept client";
         }
 

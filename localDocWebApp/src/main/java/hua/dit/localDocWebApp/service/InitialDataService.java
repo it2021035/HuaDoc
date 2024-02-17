@@ -30,6 +30,7 @@ public class InitialDataService {
     }
 
     private void createUsersAndRoles() {
+        //creates roles if they dont exist
         roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
             roleRepository.save(new Role("ROLE_ADMIN"));
             return null;
@@ -43,6 +44,8 @@ public class InitialDataService {
             return null;
         });
 
+
+        //creates users if they dont exist 1 for each role
         User user = userRepository.findByUsername("client1");
         if (user == null) {
             User user1 = new User("client1", "client1@hua.gr", this.passwordEncoder.encode("123456"));

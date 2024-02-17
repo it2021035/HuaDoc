@@ -58,8 +58,14 @@ public class ClientRestController {
     @GetMapping("/list/doc/{postalCode}/{client_id}")
     public ResponseEntity<List<Doctor>> showDocList(@PathVariable String postalCode, @PathVariable Integer client_id){
         Iterable<Doctor> doctors = doctorService.getDoctorByPostalCode(postalCode);
+        List<Doctor> doctorsList = (List<Doctor>) doctors;
+        for (Doctor doctor : doctors) {
+            if(doctor.getCurrentClients() >= doctor.getMaxClients()){
+                doctorsList.add(doctor);
+            }
+        }
 
-        return doctors != null ? ResponseEntity.ok((List<Doctor>) doctors) : ResponseEntity.notFound().build();
+        return doctorsList != null ? ResponseEntity.ok(doctorsList) : ResponseEntity.notFound().build();
 
     }
 
