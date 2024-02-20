@@ -107,7 +107,7 @@ public class InitialDataService {
             doctor1.setState("Somewhere");
             doctor1.setPhone("1234567890");
             doctor1.setSpeciality("very good Doctor!");
-            doctor1.setMaxClients(2);
+            doctor1.setMaxClients(1);
             doctor1.setUser(userRepository.findByUsername("doctor1"));
             doctorRepository.save(doctor1);
 
