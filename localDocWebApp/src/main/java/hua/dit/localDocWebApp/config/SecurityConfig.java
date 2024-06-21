@@ -15,7 +15,6 @@ import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
 
-
 @Configuration
 @EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true)
@@ -39,9 +38,9 @@ public class SecurityConfig {
         final CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowedHeaders(
                 List.of("Authorization", "Cache-Control", "Content-Type"));
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:5173"));
+        corsConfiguration.setAllowedOrigins(List.of("http://192.168.56.103", "http://localhost:5173")); 
         corsConfiguration
-                .setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT", "OPTIONS", "PATCH", "DELETE"));
+                .setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.setExposedHeaders(List.of("Authorization"));
 
