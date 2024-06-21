@@ -14,6 +14,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.List;
+import java.util.Arrays;
+
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -36,13 +38,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         final CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedHeaders(
-                List.of("Authorization", "Cache-Control", "Content-Type"));
-        corsConfiguration.setAllowedOrigins(List.of("http://192.168.56.103", "http://localhost:5173")); 
-        corsConfiguration
-                .setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
-        corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setExposedHeaders(List.of("Authorization"));
+        corsConfiguration.setAllowedOrigins(Arrays.asList("*"));
+        corsConfiguration.setAllowedMethods(Arrays.asList("*"));
+        corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
 
         http
                 .csrf(csrf -> csrf.disable())
@@ -51,7 +49,7 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(unauthorizedHandler))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**","/actuator/**").permitAll()
                         .requestMatchers(
                                 "/v3/api-docs/**",
                                 "/v2/api-docs/**",
