@@ -22,7 +22,6 @@ services:
       - 'dslabdb:/var/lib/postgresql/data/'
 
   spring:
-    image: sp
     build:
       context: .
       dockerfile: Dockerfile
@@ -50,6 +49,7 @@ services:
     depends_on:
       spring:
         condition: service_healthy
+
 
 volumes:
   dslabdb:
