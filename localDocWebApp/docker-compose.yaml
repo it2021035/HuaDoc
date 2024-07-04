@@ -45,7 +45,7 @@ services:
       context: https://github.com/it2021089/LocalDocWebAppVue.git#main
       dockerfile: localdocwebapp-vue/Dockerfile
     ports:
-      - "9000:80"
+      - "80:80"
     depends_on:
       spring:
         condition: service_healthy
