@@ -13,12 +13,16 @@ pipeline {
         }
         stage('Preparation') {
             steps {
-                sh 'chmod +x localDocWebApp/./mvnw'
+                dir('localDocWebApp') {
+                    sh 'chmod +x ./mvnw'
+                }
             }
         }
         stage('Test') {
             steps {
-                sh 'localDocWebApp/./mvnw test'
+                dir('localDocWebApp') {
+                    sh './mvnw test'
+                }
             }
         }
         stage('Run Ansible Pipeline') {
