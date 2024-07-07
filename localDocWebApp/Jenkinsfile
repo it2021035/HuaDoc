@@ -1,3 +1,5 @@
+pipeline {
+    agent any
 
     stages {
         stage('Checkout') {
@@ -10,19 +12,17 @@
                 sh './mvnw test'
             }
         }
-        stage('run ansible pipeline') {
+        stage('Run Ansible Pipeline') {
             steps {
                 build job: 'ansible'
             }
         }
-        stage('install ansible prerequisites') {
+        stage('Install Ansible Prerequisites') {
             steps {
-                sh '''
-                    ansible-galaxy install geerlingguy.postgresql
-                '''
+                sh 'ansible-galaxy install geerlingguy.postgresql'
             }
         }
-        stage('Install postgres') {
+        stage('Install Postgres') {
             steps {
                 sh '''
                     export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
@@ -30,24 +30,15 @@
                 '''
             }
         }
-
-        stage('Deploy spring boot app') {
+        stage('Deploy Spring Boot App') {
             steps {
                 sh '''
-                   # replace dbserver in host_vars
-                    # sed -i 's/dbserver/51.13.35.234/g' ~/workspace/ansible/host_vars/appserver-vm.yaml
-                   # replace workingdir in host_vars
-                    # sed -i 's/vagrant/azureuser/g' ~/workspace/ansible/host_vars/appserver-vm.yaml
-                '''
-                sh '''
-                    # edit host var for appserver
-
                     export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
                     ansible-playbook -i ~/workspace/ansible/hosts.yaml -l appserver-vm ~/workspace/ansible/playbooks/spring.yaml
                 '''
             }
         }
-       stage('Deploy frontend') {
+        stage('Deploy Frontend') {
             steps {
                 sh '''
                     sed -i 's/dbserver/51.13.35.234/g' ~/workspace/ansible/host_vars/appserver-vm.yaml
@@ -55,5 +46,6 @@
                     ansible-playbook -i ~/workspace/ansible/hosts.yaml -l appserver-vm -e branch=main -e backend_server_url=http://localhost:9090 ~/workspace/ansible/playbooks/vue.yaml
                 '''
             }
-       }
+        }
     }
+}
