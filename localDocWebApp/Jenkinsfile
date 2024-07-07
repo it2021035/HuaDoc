@@ -18,13 +18,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                script {
-                    if (isUnix()) {
-                        sh 'export JAVA_HOME=$JAVA_HOME && localDocWebApp/./mvnw test'
-                    } else {
-                        bat 'set JAVA_HOME=%JAVA_HOME% && localDocWebApp\\mvnw test'
-                    }
-                }
+                sh 'localDocWebApp/mvnw test'
             }
         }
         stage('Run Ansible Pipeline') {
