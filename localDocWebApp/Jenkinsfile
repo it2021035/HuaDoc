@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'localDocWebApp/mvnw test'
+                sh 'localDocWebApp/./mvnw test'
             }
         }
         stage('Run Ansible Pipeline') {
