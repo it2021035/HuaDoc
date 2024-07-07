@@ -7,6 +7,11 @@ pipeline {
                 git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
             }
         }
+        stage('Preparation') {
+            steps {
+                sh 'chmod +x localDocWebApp/./mvnw'
+            }
+        }
         stage('Test') {
             steps {
                 sh 'localDocWebApp/./mvnw test'
@@ -48,4 +53,5 @@ pipeline {
             }
         }
     }
+
 }
