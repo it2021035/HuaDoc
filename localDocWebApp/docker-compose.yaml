@@ -22,9 +22,10 @@ services:
       - 'dslabdb:/var/lib/postgresql/data/'
 
   spring:
+    image: sp
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: nonroot.Dockerfile
     ports:
       - "9090:9090"
     depends_on:
@@ -41,6 +42,7 @@ services:
       retries: 3
 
   frontend:
+    image: front
     build:
       context: https://github.com/it2021089/LocalDocWebAppVue.git#main
       dockerfile: localdocwebapp-vue/Dockerfile
