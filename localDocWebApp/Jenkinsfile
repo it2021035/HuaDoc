@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        JAVA_HOME = "/usr/lib/jvm/java-11-openjdk-amd64" 
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -14,7 +18,13 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'localDocWebApp/./mvnw test'
+                script {
+                    if (isUnix()) {
+                        sh 'export JAVA_HOME=$JAVA_HOME && localDocWebApp/./mvnw test'
+                    } else {
+                        bat 'set JAVA_HOME=%JAVA_HOME% && localDocWebApp\\mvnw test'
+                    }
+                }
             }
         }
         stage('Run Ansible Pipeline') {
@@ -53,5 +63,4 @@ pipeline {
             }
         }
     }
-
 }
