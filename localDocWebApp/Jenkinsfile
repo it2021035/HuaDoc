@@ -6,6 +6,15 @@ pipeline {
     }
 
     stages {
+        stage('Setup Environment') {
+            steps {
+                script {
+                    if (sh(returnStatus: true, script: 'which ansible') != 0) {
+                        sh 'sudo apt-get update && sudo apt-get install -y ansible'
+                    }
+                }
+            }
+        }
         stage('Checkout') {
             steps {
                 git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
