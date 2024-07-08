@@ -6,15 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Setup Environment') {
-            steps {
-                script {
-                    if (sh(returnStatus: true, script: 'which ansible') != 0) {
-                        sh 'sudo apt-get update && sudo apt-get install -y ansible'
-                    }
-                }
-            }
-        }
         stage('Checkout') {
             steps {
                 git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
@@ -39,11 +30,6 @@ pipeline {
                 build job: 'ansible'
             }
         }
-        stage('Install Ansible Prerequisites') {
-            steps {
-                sh 'ansible-galaxy install geerlingguy.postgresql'
-            }
-        }
         stage('Install Postgres') {
             steps {
                 sh '''
@@ -55,17 +41,18 @@ pipeline {
         stage('Deploy Spring Boot App') {
             steps {
                 sh '''
+                    sed -i 's/dbserver/4.211.249.233/g' ~/workspace/ansible/host_vars/appserver-vm.yaml
                     export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible/hosts.yaml -l appserver-vm ~/workspace/ansible/playbooks/spring.yaml
+                    ansible-playbook -i ~/workspace/ansible/hosts.yaml -l appserver ~/workspace/ansible/playbooks/spring.yaml
                 '''
             }
         }
         stage('Deploy Frontend') {
             steps {
                 sh '''
-                    sed -i 's/dbserver/51.13.35.234/g' ~/workspace/ansible/host_vars/appserver-vm.yaml
+                    sed -i 's/dbserver/4.211.249.233/g' ~/workspace/ansible/host_vars/appserver-vm.yaml
                     export ANSIBLE_CONFIG=~/workspace/ansible/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible/hosts.yaml -l appserver-vm -e branch=main -e backend_server_url=http://localhost:9090 ~/workspace/ansible/playbooks/vue.yaml
+                    ansible-playbook -i ~/workspace/ansible/hosts.yaml -l frontserver ~/workspace/ansible/playbooks/vue.yaml
                 '''
             }
         }
