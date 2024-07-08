@@ -49,7 +49,6 @@ pipeline {
         stage('Deploy Frontend') {
             steps {
                 sh '''
-                    sed -i 's/dbserver/52.143.130.37/g' ~/workspace/ansible/ansible-playground/host_vars/appserver.yaml
                     export ANSIBLE_CONFIG=~/workspace/ansible/ansible-playground/ansible.cfg
                     ansible-playbook -i ~/workspace/ansible/ansible-playground/hosts.yaml -l frontserver ~/workspace/ansible/ansible-playground/playbooks/vue.yaml
                 '''
