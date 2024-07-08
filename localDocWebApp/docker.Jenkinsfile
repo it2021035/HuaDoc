@@ -13,18 +13,16 @@ pipeline {
         DOCKER_PREFIX_VUE = 'ghcr.io/it2021089/front'
         JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
     }
-    }
-
 
     stages {
-       stage('Checkout') {
+       stage('Checkout Spring') {
             steps {
-                git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
-            }
+                    git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
+                }
         }
-  stage('Checkout Vue') {
+       stage('Checkout Vue') {
             steps {
-                dir('localdocwebapp-vue') {
+                dir('localDocWebAppVue') {
                     git branch: 'main', url: 'https://github.com/it2021089/LocalDocWebAppVue.git'
                 }
             }
@@ -58,7 +56,7 @@ pipeline {
         }
         stage('Docker build and push Vue') {
             steps {
-                dir('localdocwebap-vue') {
+                dir('localDocWebAppVue') {
                     sh '''
                         HEAD_COMMIT=$(git rev-parse --short HEAD)
                         TAG=$HEAD_COMMIT-$BUILD_ID
@@ -83,3 +81,4 @@ pipeline {
             }
         }
     }
+}
