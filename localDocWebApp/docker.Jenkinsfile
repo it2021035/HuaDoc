@@ -9,15 +9,24 @@ pipeline {
         DOCKER_TOKEN = credentials('docker-push-secret')
         DOCKER_USER = 'it2021089'
         DOCKER_SERVER = 'ghcr.io'
-        DOCKER_PREFIX = 'ghcr.io/it2021089/sp'
+        DOCKER_PREFIX_SP = 'ghcr.io/it2021089/sp'
+        DOCKER_PREFIX_VUE = 'ghcr.io/it2021089/front'
         JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
-
     }
 
     stages {
-       stage('Checkout') {
+       stage('Checkout Spring') {
             steps {
-                git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
+                dir('localDocWebApp') {
+                    git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
+                }
+            }
+        }
+        stage('Checkout Vue') {
+            steps {
+                dir('localdocwebapp-vue') {
+                    git branch: 'main', url: 'https://github.com/it2021089/LocalDocWebAppVue.git'
+                }
             }
         }
        stage('Preparation') {
@@ -34,43 +43,44 @@ pipeline {
                 }
             }
         }
-        stage('Docker build and push') {
+        stage('Docker build and push Spring') {
             steps {
                 dir('localDocWebApp') {
                     sh '''
                         HEAD_COMMIT=$(git rev-parse --short HEAD)
                         TAG=$HEAD_COMMIT-$BUILD_ID
-                        docker build --rm -t $DOCKER_PREFIX:$TAG -t $DOCKER_PREFIX:latest  -f nonroot.Dockerfile .
+                        docker build --rm -t $DOCKER_PREFIX_SP:$TAG -t $DOCKER_PREFIX_SP:latest -f nonroot.Dockerfile .
                         echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_PREFIX --all-tags
+                        docker push $DOCKER_PREFIX_SP --all-tags
                         '''
                 }
-           
             }
         }
- 
+        stage('Docker build and push Vue') {
+            steps {
+                dir('localdocwebap-vue') {
+                    sh '''
+                        HEAD_COMMIT=$(git rev-parse --short HEAD)
+                        TAG=$HEAD_COMMIT-$BUILD_ID
+                        docker build --rm -t $DOCKER_PREFIX_VUE:$TAG -t $DOCKER_PREFIX_VUE:latest -f Dockerfile .
+                        echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
+                        docker push $DOCKER_PREFIX_VUE --all-tags
+                        '''
+                }
+            }
+        }
         stage('run ansible pipeline') {
             steps {
-                dir('localDocWebApp') 
-                {
-                    build job: 'ansible'
-                }
-                
+                build job: 'ansible'
             }
         }
         stage('Install project with docker compose') {
-                    steps {
-                        dir('localDocWebApp') 
-                        {
-                            sh '''
-                                export ANSIBLE_CONFIG=~/workspace/ansible/ansible-playground/ansible.cfg
-                                ansible-playbook -i ~/workspace/ansible/ansible-playground/hosts.yaml -l dockerserver ~/workspace/ansible/ansible-playground/playbooks/spring-vue-docker.yaml
-                                '''
-                        }
-                     
-                    }
-         }
-
+            steps {
+                sh '''
+                    export ANSIBLE_CONFIG=~/workspace/ansible/ansible-playground/ansible.cfg
+                    ansible-playbook -i ~/workspace/ansible/ansible-playground/hosts.yaml -l dockerserver ~/workspace/ansible/ansible-playground/playbooks/spring-vue-docker.yaml
+                    '''
+            }
+        }
     }
-
 }
