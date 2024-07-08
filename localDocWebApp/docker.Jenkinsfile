@@ -10,6 +10,8 @@ pipeline {
         DOCKER_USER = 'it2021089'
         DOCKER_SERVER = 'ghcr.io'
         DOCKER_PREFIX = 'ghcr.io/it2021089/sp'
+        JAVA_HOME = "/usr/lib/jvm/java-17-openjdk-amd64"
+
     }
 
     stages {
