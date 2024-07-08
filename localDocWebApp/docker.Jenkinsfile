@@ -56,7 +56,7 @@ pipeline {
         }
         stage('Docker build and push Vue') {
             steps {
-                dir('LocalDocWebAppVue/localdocwebapp-vue') {
+
                     sh '''
                         HEAD_COMMIT=$(git rev-parse --short HEAD)
                         TAG=$HEAD_COMMIT-$BUILD_ID
@@ -65,7 +65,7 @@ pipeline {
                         docker push $DOCKER_PREFIX_VUE --all-tags
                         '''
                 }
-            }
+            
         }
         stage('run ansible pipeline') {
             steps {
