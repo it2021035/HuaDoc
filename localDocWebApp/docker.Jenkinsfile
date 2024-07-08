@@ -64,7 +64,7 @@ pipeline {
                         {
                             sh '''
                                 export ANSIBLE_CONFIG=~/workspace/ansible/ansible-playground/ansible.cfg
-                                ansible-playbook -i ~/workspace/ansible/ansible-playground/hosts.yaml -l appserver ~/workspace/ansible/ansible-playground/playbooks/spring-vue-docker.yaml
+                                ansible-playbook -i ~/workspace/ansible/ansible-playground/hosts.yaml -l dockerserver ~/workspace/ansible/ansible-playground/playbooks/spring-vue-docker.yaml
                                 '''
                         }
                      
