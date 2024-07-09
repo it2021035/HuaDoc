@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spring-ingress
+spec:
+  rules:
+    - host: "it2021089-spring.ddns.net"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: spring
+                port:
+                  number: 9090
