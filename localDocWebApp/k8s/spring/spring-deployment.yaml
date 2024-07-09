@@ -49,3 +49,5 @@ spec:
           ports:
             - containerPort:  9090
               name:  spring
+      imagePullSecrets:
+      -name: registry-credentials
