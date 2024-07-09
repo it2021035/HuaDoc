@@ -49,10 +49,7 @@ pipeline {
                             script {
                                 def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
                                 def TAG = "${HEAD_COMMIT}-${env.BUILD_ID}"
-                                echo "HEAD_COMMIT: ${HEAD_COMMIT}"
-                                echo "TAG: ${TAG}"
                                 sh '''
-                                    echo "Building and pushing Spring image..."
                                     docker build --rm -t ${DOCKER_PREFIX_SP}:${TAG} -t ${DOCKER_PREFIX_SP}:latest -f nonroot.Dockerfile .
                                     echo ${DOCKER_TOKEN} | docker login ${DOCKER_SERVER} -u ${DOCKER_USER} --password-stdin
                                     docker push ${DOCKER_PREFIX_SP}:${TAG}
@@ -66,17 +63,10 @@ pipeline {
                     steps {
                         dir('localDocWebAppVue') {
                             script {
-                                echo "Current working directory:"
-                                sh 'pwd'
-                                echo "Listing files:"
-                                sh 'ls -l'
                                 def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
                                 def TAG = "${HEAD_COMMIT}-${env.BUILD_ID}"
-                                echo "HEAD_COMMIT: ${HEAD_COMMIT}"
-                                echo "TAG: ${TAG}"
                                 sh '''
-                                    echo "Building and pushing Vue image..."
-                                    docker build --rm -t ${DOCKER_PREFIX_VUE}:${TAG} -t ${DOCKER_PREFIX_VUE}:latest -f Dockerfile .
+                                    docker build --rm -t ${DOCKER_PREFIX_VUE}:${TAG} -t ${DOCKER_PREFIX_VUE}:latest -f localdocwebapp-vue/Dockerfile .
                                     echo ${DOCKER_TOKEN} | docker login ${DOCKER_SERVER} -u ${DOCKER_USER} --password-stdin
                                     docker push ${DOCKER_PREFIX_VUE}:${TAG}
                                     docker push ${DOCKER_PREFIX_VUE}:latest
