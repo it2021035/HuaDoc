@@ -75,9 +75,7 @@ pipeline {
         stage('deploy to k8s') {
             steps {
                 sh '''
-                    HEAD_COMMIT=$(git rev-parse --short HEAD)
-                    TAG=$HEAD_COMMIT-$BUILD_ID
-                    ./kubectl set image deployment/spring-deployment spring=$DOCKER_PREFIX:$TAG
+                    ./kubectl set image deployment/spring-deployment spring=latest
                     ./kubectl rollout status deployment spring-deployment --watch --timeout=2m
                 '''
             }
