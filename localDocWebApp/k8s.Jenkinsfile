@@ -57,6 +57,8 @@ pipeline {
         stage('Docker build and push Vue') {
             steps {
                 dir('localDocWebAppVue') {
+                        def workspace = pwd()
+                        ${workspace} 
                     sh '''
                         HEAD_COMMIT=$(git rev-parse --short HEAD)
                         TAG=$HEAD_COMMIT-$BUILD_ID
