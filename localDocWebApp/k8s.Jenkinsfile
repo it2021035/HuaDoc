@@ -72,13 +72,17 @@ pipeline {
                 build job: 'ansible'
             }
         }
-        stage('Install project with k8s') {
+        stage('deploy to k8s') {
             steps {
                 sh '''
-                    export ANSIBLE_CONFIG=~/workspace/ansible/ansible-playground/ansible.cfg
-                    ansible-playbook -i ~/workspace/ansible/ansible-playground/hosts.yaml -l k8s-vm ~/workspace/ansible/ansible-playground/playbooks/k8s.yaml
-                    '''
+                    HEAD_COMMIT=$(git rev-parse --short HEAD)
+                    TAG=$HEAD_COMMIT-$BUILD_ID
+                    kubectl set image deployment/spring-deployment sp=$DOCKER_PREFIX:$TAG
+                    kubectl rollout status deployment spring-deployment --watch --timeout=2m
+                '''
             }
         }
     }
 }
+
+
