@@ -15,19 +15,19 @@ pipeline {
     }
 
     stages {
-       stage('Checkout Spring') {
+        stage('Checkout Spring') {
             steps {
-                    git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
-                }
+                git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
+            }
         }
-       stage('Checkout Vue') {
+        stage('Checkout Vue') {
             steps {
                 dir('localDocWebAppVue') {
                     git branch: 'main', url: 'https://github.com/it2021089/LocalDocWebAppVue.git'
                 }
             }
         }
-       stage('Preparation') {
+        stage('Preparation') {
             steps {
                 dir('localDocWebApp') {
                     sh 'chmod +x ./mvnw'
@@ -49,8 +49,9 @@ pipeline {
                         TAG=$HEAD_COMMIT-$BUILD_ID
                         docker build --rm -t $DOCKER_PREFIX_SP:$TAG -t $DOCKER_PREFIX_SP:latest -f nonroot.Dockerfile .
                         echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_PREFIX_SP --all-tags
-                        '''
+                        docker push $DOCKER_PREFIX_SP:$TAG
+                        docker push $DOCKER_PREFIX_SP:latest
+                    '''
                 }
             }
         }
@@ -62,8 +63,9 @@ pipeline {
                         TAG=$HEAD_COMMIT-$BUILD_ID
                         docker build --rm -t $DOCKER_PREFIX_VUE:$TAG -t $DOCKER_PREFIX_VUE:latest -f localdocwebapp-vue/Dockerfile .
                         echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_PREFIX_VUE --all-tags
-                        '''
+                        docker push $DOCKER_PREFIX_VUE:$TAG
+                        docker push $DOCKER_PREFIX_VUE:latest
+                    '''
                 }
             }
         }
@@ -77,12 +79,10 @@ pipeline {
                 sh '''
                     HEAD_COMMIT=$(git rev-parse --short HEAD)
                     TAG=$HEAD_COMMIT-$BUILD_ID
-                    kubectl set image deployment/spring-deployment sp=$DOCKER_PREFIX:$TAG
+                    kubectl set image deployment/spring-deployment sp=$DOCKER_PREFIX_SP:$TAG
                     kubectl rollout status deployment spring-deployment --watch --timeout=2m
                 '''
             }
         }
     }
 }
-
-
