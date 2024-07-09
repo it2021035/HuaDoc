@@ -16,38 +16,36 @@ spec:
         app: spring
     spec:
       containers:
-        - name:  spring
-          image:  ghcr.io/it2021089/sp:latest
-          livenessProbe:
-            httpGet:
-              path: "/actuator/health/liveness"
-              port: 9090
-            failureThreshold: 20
-            periodSeconds: 10
-            initialDelaySeconds: 30
-          readinessProbe:
+      - name:  spring
+        image:  ghcr.io/it2021089/sp:latest
+        livenessProbe:
+          httpGet:
+            path: "/actuator/health/liveness"
+            port: 9090
+          failureThreshold: 20
+          periodSeconds: 10
+          initialDelaySeconds: 30
+        readinessProbe:
             httpGet:
               path: "/actuator/health/readiness"
               port: 9090
             failureThreshold: 10
             periodSeconds: 10
             initialDelaySeconds: 30
-          resources:
-            requests:
-              cpu: 200m
-              memory: 256Mi
-            limits:
-              cpu: 1000m
-              memory: 512Mi
-          env:
-            - name: SPRING_DATASOURCE_URL
-              value: jdbc:postgresql://postgres:5432/dsdb
-            - name: SPRING_DATASOURCE_USERNAME
-              value: dbuser
-            - name: SPRING_DATASOURCE_PASSWORD
-              value: pass123
-          ports:
-            - containerPort:  9090
-              name:  spring
-      imagePullSecrets:
-      -name: registry-credentials
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 1000m
+            memory: 512Mi
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgres:5432/dsdb
+        - name: SPRING_DATASOURCE_USERNAME
+          value: dbuser
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: pass123
+        ports:
+        - containerPort:  9090
+          name:  spring

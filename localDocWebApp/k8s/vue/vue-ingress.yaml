@@ -4,13 +4,13 @@ metadata:
   name: vue-ingress
 spec:
   rules:
-    - host: "it2021089-spring.ddns.net"
-      http:
-        paths:
-          - path: /
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: vue-svc
-                port:
-                  name: vue
+  - host: "it2021089-spring.ddns.net"
+    http:
+      paths:
+      - path: /
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: vue-svc
+            port:
+              name: vue

@@ -7,7 +7,7 @@ spec:
     - host: "it2021089-spring.ddns.net"
       http:
         paths:
-          - path: /
+          - path: /spring
             pathType: ImplementationSpecific
             backend:
               service:
