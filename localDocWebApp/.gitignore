@@ -33,4 +33,4 @@ build/
 .vscode/
 
 # Ignore Docker config in Kubernetes folder
-**localDocWebApp/k8s/.dockerconfig.json
+localDocWebApp/k8s/.dockerconfig.json
