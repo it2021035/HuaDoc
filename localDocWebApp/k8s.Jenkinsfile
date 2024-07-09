@@ -15,6 +15,19 @@ pipeline {
     }
 
     stages {
+        stage('Install kubectl') {
+            steps {
+                sh '''
+                    if ! command -v kubectl &> /dev/null; then
+                        echo "kubectl could not be found, installing..."
+                        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+                        chmod +x kubectl
+                        sudo mv kubectl /usr/local/bin/
+                    fi
+                    kubectl version --client
+                '''
+            }
+        }
        stage('Checkout Spring') {
             steps {
                     git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
@@ -84,5 +97,3 @@ pipeline {
         }
     }
 }
-
-
