@@ -34,4 +34,3 @@ build/
 
 # Ignore Docker config in Kubernetes folder
 localDocWebApp/k8s/.dockerconfig.json
-n
