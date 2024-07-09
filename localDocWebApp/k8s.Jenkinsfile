@@ -17,8 +17,8 @@ pipeline {
     stages {
        stage('Checkout Spring') {
             steps {
-                    git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
-                }
+                git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
+            }
         }
        stage('Checkout Vue') {
             steps {
@@ -44,27 +44,34 @@ pipeline {
         stage('Docker build and push Spring') {
             steps {
                 dir('localDocWebApp') {
-                    sh '''
-                        HEAD_COMMIT=$(git rev-parse --short HEAD)
-                        TAG=$HEAD_COMMIT-$BUILD_ID
-                        docker build --rm -t $DOCKER_PREFIX_SP:$TAG -t $DOCKER_PREFIX_SP:latest -f nonroot.Dockerfile .
-                        echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_PREFIX_SP --all-tags
-                        '''
+                    script {
+                        def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                        def TAG = "${HEAD_COMMIT}-${BUILD_ID}"
+                        sh """
+                            docker build --rm -t ${env.DOCKER_PREFIX_SP}:${TAG} -t ${env.DOCKER_PREFIX_SP}:latest -f nonroot.Dockerfile .
+                            echo ${env.DOCKER_TOKEN} | docker login ${env.DOCKER_SERVER} -u ${env.DOCKER_USER} --password-stdin
+                            docker push ${env.DOCKER_PREFIX_SP}:${TAG}
+                            docker push ${env.DOCKER_PREFIX_SP}:latest
+                        """
+                    }
                 }
             }
         }
         stage('Docker build and push Vue') {
             steps {
                 dir('localDocWebAppVue') {
-                    sh '''
-                        pwd
-                        HEAD_COMMIT=$(git rev-parse --short HEAD)
-                        TAG=$HEAD_COMMIT-$BUILD_ID
-                        docker build --rm -t $DOCKER_PREFIX_VUE:$TAG -t $DOCKER_PREFIX_VUE:latest -f /localdocwebapp-vue/Dockerfile .
-                        echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_PREFIX_VUE --all-tags
-                        '''
+                    script {
+                        sh 'pwd'
+                        sh 'ls -l'
+                        def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                        def TAG = "${HEAD_COMMIT}-${BUILD_ID}"
+                        sh """
+                            docker build --rm -t ${env.DOCKER_PREFIX_VUE}:${TAG} -t ${env.DOCKER_PREFIX_VUE}:latest -f localdocwebapp-vue/Dockerfile .
+                            echo ${env.DOCKER_TOKEN} | docker login ${env.DOCKER_SERVER} -u ${env.DOCKER_USER} --password-stdin
+                            docker push ${env.DOCKER_PREFIX_VUE}:${TAG}
+                            docker push ${env.DOCKER_PREFIX_VUE}:latest
+                        """
+                    }
                 }
             }
         }
@@ -75,15 +82,15 @@ pipeline {
         }
         stage('deploy to k8s') {
             steps {
-                sh '''
-                    HEAD_COMMIT=$(git rev-parse --short HEAD)
-                    TAG=$HEAD_COMMIT-$BUILD_ID
-                    kubectl set image deployment/spring-deployment sp=$DOCKER_PREFIX:$TAG
-                    kubectl rollout status deployment spring-deployment --watch --timeout=2m
-                '''
+                script {
+                    def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    def TAG = "${HEAD_COMMIT}-${BUILD_ID}"
+                    sh """
+                        kubectl set image deployment/spring-deployment sp=${env.DOCKER_PREFIX_SP}:${TAG}
+                        kubectl rollout status deployment spring-deployment --watch --timeout=2m
+                    """
+                }
             }
         }
     }
 }
-
-
