@@ -41,31 +41,49 @@ pipeline {
                 }
             }
         }
-        stage('Docker build and push Spring') {
-            steps {
-                dir('localDocWebApp') {
-                    sh '''
-                        HEAD_COMMIT=$(git rev-parse --short HEAD)
-                        TAG=$HEAD_COMMIT-$BUILD_ID
-                        docker build --rm -t $DOCKER_PREFIX_SP:$TAG -t $DOCKER_PREFIX_SP:latest -f nonroot.Dockerfile .
-                        echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_PREFIX_SP:$TAG
-                        docker push $DOCKER_PREFIX_SP:latest
-                    '''
+        stage('Docker Build and Push') {
+            parallel {
+                stage('Docker build and push Spring') {
+                    steps {
+                        dir('localDocWebApp') {
+                            script {
+                                def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                                def TAG = "${HEAD_COMMIT}-${env.BUILD_ID}"
+                                echo "HEAD_COMMIT: ${HEAD_COMMIT}"
+                                echo "TAG: ${TAG}"
+                                sh '''
+                                    echo "Building and pushing Spring image..."
+                                    docker build --rm -t ${DOCKER_PREFIX_SP}:${TAG} -t ${DOCKER_PREFIX_SP}:latest -f nonroot.Dockerfile .
+                                    echo ${DOCKER_TOKEN} | docker login ${DOCKER_SERVER} -u ${DOCKER_USER} --password-stdin
+                                    docker push ${DOCKER_PREFIX_SP}:${TAG}
+                                    docker push ${DOCKER_PREFIX_SP}:latest
+                                '''
+                            }
+                        }
+                    }
                 }
-            }
-        }
-        stage('Docker build and push Vue') {
-            steps {
-                dir('localDocWebAppVue') {
-                    sh '''
-                        HEAD_COMMIT=$(git rev-parse --short HEAD)
-                        TAG=$HEAD_COMMIT-$BUILD_ID
-                        docker build --rm -t $DOCKER_PREFIX_VUE:$TAG -t $DOCKER_PREFIX_VUE:latest -f localdocwebapp-vue/Dockerfile .
-                        echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_PREFIX_VUE:$TAG
-                        docker push $DOCKER_PREFIX_VUE:latest
-                    '''
+                stage('Docker build and push Vue') {
+                    steps {
+                        dir('localDocWebAppVue') {
+                            script {
+                                echo "Current working directory:"
+                                sh 'pwd'
+                                echo "Listing files:"
+                                sh 'ls -l'
+                                def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                                def TAG = "${HEAD_COMMIT}-${env.BUILD_ID}"
+                                echo "HEAD_COMMIT: ${HEAD_COMMIT}"
+                                echo "TAG: ${TAG}"
+                                sh '''
+                                    echo "Building and pushing Vue image..."
+                                    docker build --rm -t ${DOCKER_PREFIX_VUE}:${TAG} -t ${DOCKER_PREFIX_VUE}:latest -f Dockerfile .
+                                    echo ${DOCKER_TOKEN} | docker login ${DOCKER_SERVER} -u ${DOCKER_USER} --password-stdin
+                                    docker push ${DOCKER_PREFIX_VUE}:${TAG}
+                                    docker push ${DOCKER_PREFIX_VUE}:latest
+                                '''
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -76,12 +94,14 @@ pipeline {
         }
         stage('deploy to k8s') {
             steps {
-                sh '''
-                    HEAD_COMMIT=$(git rev-parse --short HEAD)
-                    TAG=$HEAD_COMMIT-$BUILD_ID
-                    kubectl set image deployment/spring-deployment sp=$DOCKER_PREFIX_SP:$TAG
-                    kubectl rollout status deployment spring-deployment --watch --timeout=2m
-                '''
+                script {
+                    def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                    def TAG = "${HEAD_COMMIT}-${env.BUILD_ID}"
+                    sh '''
+                        kubectl set image deployment/spring-deployment sp=${DOCKER_PREFIX_SP}:${TAG}
+                        kubectl rollout status deployment spring-deployment --watch --timeout=2m
+                    '''
+                }
             }
         }
     }
