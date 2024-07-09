@@ -56,7 +56,7 @@ pipeline {
         }
         stage('Docker build and push Vue') {
             steps {
-                dir('localdocwebapp-vue') {
+                dir('localDocWebAppVue') {
                     sh '''
                         HEAD_COMMIT=$(git rev-parse --short HEAD)
                         TAG=$HEAD_COMMIT-$BUILD_ID
