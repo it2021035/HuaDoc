@@ -75,7 +75,7 @@ pipeline {
         stage('deploy to k8s') {
             steps {
                 sh '''
-                    kubectl set image deployment/spring-deployment spring=$DOCKER_PREFIX:$TAG
+                    kubectl set image deployment/spring-deployment spring=$DOCKER_PREFIX_SP:$TAG
                     kubectl rollout status deployment spring-deployment --watch --timeout=2m
                 '''
             }
