@@ -15,19 +15,19 @@ pipeline {
     }
 
     stages {
-       stage('Checkout Spring') {
+        stage('Checkout Spring') {
             steps {
-                    git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
-                }
+                git branch: 'master', url: 'git@github.com:it2021035/HuaDoc.git'
+            }
         }
-       stage('Checkout Vue') {
+        stage('Checkout Vue') {
             steps {
                 dir('localDocWebAppVue') {
                     git branch: 'main', url: 'https://github.com/it2021089/LocalDocWebAppVue.git'
                 }
             }
         }
-       stage('Preparation') {
+        stage('Preparation') {
             steps {
                 dir('localDocWebApp') {
                     sh 'chmod +x ./mvnw'
@@ -44,26 +44,32 @@ pipeline {
         stage('Docker build and push Spring') {
             steps {
                 dir('localDocWebApp') {
-                    sh '''
-                        HEAD_COMMIT=$(git rev-parse --short HEAD)
-                        TAG=$HEAD_COMMIT-$BUILD_ID
-                        docker build --rm -t $DOCKER_PREFIX_SP:$TAG -t $DOCKER_PREFIX_SP:latest -f nonroot.Dockerfile .
-                        echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_PREFIX_SP --all-tags
-                        '''
+                    script {
+                        def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                        def TAG = "${HEAD_COMMIT}-${BUILD_ID}"
+                        env.SPRING_IMAGE_TAG = TAG
+                        sh """
+                            docker build --rm -t ${DOCKER_PREFIX_SP}:${TAG} -t ${DOCKER_PREFIX_SP}:latest -f nonroot.Dockerfile .
+                            echo ${DOCKER_TOKEN} | docker login ${DOCKER_SERVER} -u ${DOCKER_USER} --password-stdin
+                            docker push ${DOCKER_PREFIX_SP} --all-tags
+                        """
+                    }
                 }
             }
         }
         stage('Docker build and push Vue') {
             steps {
                 dir('localDocWebAppVue') {
-                    sh '''
-                        HEAD_COMMIT=$(git rev-parse --short HEAD)
-                        TAG=$HEAD_COMMIT-$BUILD_ID
-                        docker build --rm -t $DOCKER_PREFIX_VUE:$TAG -t $DOCKER_PREFIX_VUE:latest -f localdocwebapp-vue/Dockerfile .
-                        echo $DOCKER_TOKEN | docker login $DOCKER_SERVER -u $DOCKER_USER --password-stdin
-                        docker push $DOCKER_PREFIX_VUE --all-tags
-                        '''
+                    script {
+                        def HEAD_COMMIT = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
+                        def TAG = "${HEAD_COMMIT}-${BUILD_ID}"
+                        env.VUE_IMAGE_TAG = TAG
+                        sh """
+                            docker build --rm -t ${DOCKER_PREFIX_VUE}:${TAG} -t ${DOCKER_PREFIX_VUE}:latest -f localdocwebapp-vue/Dockerfile .
+                            echo ${DOCKER_TOKEN} | docker login ${DOCKER_SERVER} -u ${DOCKER_USER} --password-stdin
+                            docker push ${DOCKER_PREFIX_VUE} --all-tags
+                        """
+                    }
                 }
             }
         }
@@ -74,10 +80,13 @@ pipeline {
         }
         stage('deploy to k8s') {
             steps {
-                sh '''
-                    kubectl set image deployment/spring-deployment spring=$DOCKER_PREFIX_SP:$TAG
-                    kubectl rollout status deployment spring-deployment --watch --timeout=2m
-                '''
+                script {
+                    echo "Deploying Spring image: ${DOCKER_PREFIX_SP}:${SPRING_IMAGE_TAG}"
+                    sh """
+                        kubectl set image deployment/spring-deployment spring=${DOCKER_PREFIX_SP}:${SPRING_IMAGE_TAG}
+                        kubectl rollout status deployment spring-deployment --watch --timeout=2m
+                    """
+                }
             }
         }
     }
